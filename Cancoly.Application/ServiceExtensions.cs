@@ -20,7 +20,6 @@ namespace Cancoly.Application
             services.AddSingleton<PaymentService>();
             services.AddSingleton<UploadFileService>();
             services.AddSingleton<EmailService>();
-            services.AddSingleton<LincenseKeyService>();
             services.AddSingleton<EmailConfiguration>();
             
             

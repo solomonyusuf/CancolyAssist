@@ -13,7 +13,6 @@ using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using CancolyAPI.Components;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,8 +33,6 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options => option
     .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
 
 builder.Services.AddSwaggerGen();
 
@@ -167,8 +164,5 @@ app.MapControllers();
 app.UseCors("AllowAll");
 
 app.UseAntiforgery();
-
-app.MapRazorComponents<CancolyAPI.Components.App>()
-    .AddInteractiveServerRenderMode();
 
 app.Run();

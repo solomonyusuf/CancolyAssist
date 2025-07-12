@@ -13,10 +13,7 @@ namespace Cancoly.Domain.Entities
         public string? Image { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public AccountMetrix AccountMetrix { get; set; }
         public Organization Organization { get; set; }
-        [ForeignKey("AccountMetrix")]
-        public Guid? AccountMetrixId { get; set; }
         [ForeignKey("Organization")]
         public Guid? OrganizationId { get; set; }
         public DateTimeOffset DateCreated { get; set; } = DateTimeOffset.Now;

@@ -5,9 +5,21 @@
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>d95778a6-3ea9-4564-82a5-66f9d8f35f9c</UserSecretsId>
+	  <NoWarn>CS8669</NoWarn>
+	  <NoWarn>CS1998</NoWarn>
+	  <NoWarn> CS8632</NoWarn>
+	  <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Components\**" />
+    <Content Remove="Components\**" />
+    <EmbeddedResource Remove="Components\**" />
+    <None Remove="Components\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
 	  <PackageReference Include="OpenAI" Version="2.1.0" />
 	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
 

@@ -30,15 +30,9 @@ namespace Cancoly.Persistence.Repository
 
         ITransactionRepository IUnitOfWork.TransactionRepository => new TransactionRepository(_mainDbContext);
 
-        IAccountMetrixRepository IUnitOfWork.AccountMetrixRepository => new AccountMetrixRepository(_mainDbContext);
-
         IClientRepository IUnitOfWork.ClientRepository => new ClientRepository(_mainDbContext);
 
         IDICOMServerRepository IUnitOfWork.DICOMServerRepository => new DICOMServerRepository(_mainDbContext);
-
-        INeuralNetworkModelRepository IUnitOfWork.NeuralNetworkModelRepository => new NeuralNetworkModelRepository(_mainDbContext);
-
-        INoteRepository IUnitOfWork.NoteRepository => new NoteRepository(_mainDbContext);
 
         IOrganizationRepository IUnitOfWork.OrganizationRepository => new OrganizationRepository(_mainDbContext);
 

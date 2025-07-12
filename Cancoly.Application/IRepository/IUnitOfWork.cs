@@ -16,16 +16,10 @@ namespace Cancoly.Application.IRepository
         
         public ITransactionRepository TransactionRepository { get; }
         
-        public IAccountMetrixRepository AccountMetrixRepository { get; }
-      
         public IClientRepository ClientRepository { get; }
 
         public IDICOMServerRepository DICOMServerRepository { get; }
        
-        public INeuralNetworkModelRepository NeuralNetworkModelRepository { get; }
-        
-        public INoteRepository NoteRepository { get; }
-
         public IOrganizationRepository OrganizationRepository { get; }
         
         public IScanUploadRepository ScanUploadRepository { get; }

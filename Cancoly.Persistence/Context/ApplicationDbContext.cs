@@ -27,7 +27,6 @@ namespace Cancoly.Persistence.Context
         }
 
         public  DbSet<Organization> Organizations { get; set; }
-        public  DbSet<AccountMetrix> AccountMetrixes { get; set; }
         public  DbSet<ApplicationUser> User { get; set; }
         public  DbSet<ApplicationRole> Role { get; set; }
         public  DbSet<ApplicationUserRole> UserRole { get; set; }
@@ -37,8 +36,6 @@ namespace Cancoly.Persistence.Context
         public  DbSet<Transaction> Transactions { get; set; }
         public  DbSet<Client> Clients { get; set; }
         public  DbSet<DICOMServer> DICOMServers { get; set; }
-        public  DbSet<NeuralNetworkModel> NetworkModels { get; set; }
-        public  DbSet<Note> Notes { get; set; }
 
     }
 }

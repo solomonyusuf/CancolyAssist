@@ -35,11 +35,8 @@ namespace Cancoly.Persistence
             services.AddScoped<IScanRepository, ScanRepository>();
             services.AddScoped<IScanUploadRepository, ScanUploadRepository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
-            services.AddScoped<IAccountMetrixRepository, AccountMetrixRepository>();
             services.AddScoped<IClientRepository, ClientRepository>();
             services.AddScoped<IDICOMServerRepository, DICOMServerRepository>();
-            services.AddScoped<INeuralNetworkModelRepository, NeuralNetworkModelRepository>();
-            services.AddScoped<INoteRepository, NoteRepository>();
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
         }
     }

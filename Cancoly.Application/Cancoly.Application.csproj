@@ -4,6 +4,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <NoWarn>SYSLIB0023</NoWarn>
+	  <NoWarn>CS8669</NoWarn>
+	  <NoWarn>CS1998</NoWarn>
+	  <NoWarn> CS8632</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DinkToPdf" Version="1.0.8" />
