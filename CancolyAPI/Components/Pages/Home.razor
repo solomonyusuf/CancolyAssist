@@ -1,0 +1,23 @@
+﻿@page "/"
+@using Cancoly.Application.Features
+@inject OpenAIService openai;
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+@code{
+    protected override async Task OnInitializedAsync()
+    {
+        var payload = await openai.GenerateOutput(
+                                          //upload.FilePath
+                                         Path.Combine("wwwroot", "image(27).jpg")
+                                          );
+
+       
+
+        await base.OnInitializedAsync();
+    }
+}
