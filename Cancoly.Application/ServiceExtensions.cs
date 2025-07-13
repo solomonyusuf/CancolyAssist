@@ -12,9 +12,11 @@ namespace Cancoly.Application
         {
             services.AddTransient<PaymentService>();
             services.AddTransient<UploadFileService>();
+            services.AddTransient<OpenAIService>();
 
             //workers
             services.AddHostedService<MailSenderWorker>();
+            services.AddHostedService<TumorClassifierWorkerdded tumor cl>();
         }
     }
 }

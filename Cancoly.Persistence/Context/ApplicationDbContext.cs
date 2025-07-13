@@ -30,13 +30,13 @@ namespace Cancoly.Persistence.Context
         public virtual DbSet<ApplicationRole> Role { get; set; }
         public virtual DbSet<ApplicationUserRole> UserRole { get; set; }
         public virtual DbSet<BrainScan> BrainScans { get; set; }
+        public virtual DbSet<ScanUpload> BrainScanUpload { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<Transaction> Transactions { get; set; }
 
        
 
-        
-
+     
 
     }
 }

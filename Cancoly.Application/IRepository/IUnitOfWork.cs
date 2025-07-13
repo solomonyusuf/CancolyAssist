@@ -14,6 +14,8 @@ namespace Cancoly.Application.IRepository
         public INotificationRepository NotificationRepository { get; }
         
         public IBrainScanRepository BrainScanRepository { get; }
+
+        public IBrainScanUploadRepository ScanUploadRepository { get; }
         
         public ITransactionRepository TransactionRepository { get; }
 

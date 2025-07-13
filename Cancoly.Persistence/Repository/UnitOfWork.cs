@@ -26,6 +26,8 @@ namespace Cancoly.Persistence.Repository
         INotificationRepository IUnitOfWork.NotificationRepository => new NotificationRepository(_mainDbContext);
 
         IBrainScanRepository IUnitOfWork.BrainScanRepository => new BrainScanRepository(_mainDbContext);
+        
+        IBrainScanUploadRepository IUnitOfWork.ScanUploadRepository => new BrainScanUploadRepository(_mainDbContext);
 
         IAuthRepository IUnitOfWork.AuthRepository => new AuthRepository(_userManager);
 
