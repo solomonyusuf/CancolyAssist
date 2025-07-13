@@ -1,7 +1,6 @@
 ﻿using Cancoly.Application.IRepository;
 using Cancoly.Domain.Entities;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,18 +11,11 @@ namespace Cancoly.Application.Features
 {
     public class UploadFileService
     {
-        public IHttpContextAccessor _httpContextAccessor;
-        public UploadFileService(IHttpContextAccessor httpContextAccessor)
+        public async Task<List<string>> UploadFile(List<IFormFile> scans)
         {
-            _httpContextAccessor = httpContextAccessor;
-        }
+            var res = new List<string>();
 
-        public async Task<List<List<string>>> UploadFile(List<IFormFile> files, string url = "")
-        {
-            var paths = new List<string>();
-            var urls = new List<string>();
-
-            foreach (var file in files)
+            foreach (var file in scans)
             {
                 var date = DateTime.Now.Date;
                 var folderName = Path.Combine("wwwroot", "storage", $"{date.Day}-{date.Month}-{date.Year}");
@@ -42,19 +34,17 @@ namespace Cancoly.Application.Features
                     file.CopyTo(stream);
                 }
 
-                paths.Add(dbPath);
-                urls.Add($"{url}/cdn.coly.storage/{folderName}/{fileName}");
+                res.Add(dbPath);
             }
 
-            return new List<List<string>> { paths, urls};
+            return res;
         }
 
-  
-        public List<string> SaveBase64AsImage(string base64String, string fileType)
+        public string SaveBase64AsImage(string base64String, string fileType)
         {
             try
             {
-                // Extract fileString type if Base64 includes metadata like 'data:image/png;base64,...'
+                // Extract file type if Base64 includes metadata like 'data:image/png;base64,...'
                 var base64Data = base64String;
                 var date = DateTime.Now.Date;
 
@@ -72,10 +62,9 @@ namespace Cancoly.Application.Features
                 // Decode Base64 string
                 var imageBytes = Convert.FromBase64String(base64Data);
 
-                // Save to a unique fileString path
-                var folder = $"{date.Day}-{date.Month}-{date.Year}";
+                // Save to a unique file path
                 var fileName = $"{Guid.NewGuid()}.{fileType}";
-                var fullPath = Path.Combine("wwwroot", "storage", folder);
+                var fullPath = Path.Combine("wwwroot", "storage", $"{date.Day}-{date.Month}-{date.Year}");
                 
                 if (!Directory.Exists(fullPath))
                 {
@@ -85,10 +74,7 @@ namespace Cancoly.Application.Features
 
                 File.WriteAllBytes(filePath, imageBytes);
 
-
-                var res = $"https://{_httpContextAccessor.HttpContext.Request.Host}/cdn.coly.storage/{folder}/{fileName}";
-
-                return new List<string> { res, filePath };
+                return filePath; 
             }
             catch (Exception ex)
             {

@@ -1,11 +1,17 @@
 ﻿using Cancoly.Domain.Entities;
 using Cancoly.Persistence.Context;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using Cancoly.Application.IRepository;
-using Cancoly.Persistence.Repository;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Cancoly.Application.IRepository.All;
+using Cancoly.Application.IRepository;
+using Cancoly.Persistence.Repository.All;
+using Cancoly.Persistence.Repository;
 
 namespace Cancoly.Persistence
 {
@@ -25,19 +31,14 @@ namespace Cancoly.Persistence
             services.AddDbContext<LayoutDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
-            services.AddScoped<UserManager<ApplicationUser>>();
-            services.AddScoped<RoleManager<ApplicationRole>>();
-
-            // Create Scoped Services
+            
+            // Register Scoped Services
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
-            services.AddScoped<IScanRepository, ScanRepository>();
-            services.AddScoped<IScanUploadRepository, ScanUploadRepository>();
+            services.AddScoped<IBrainScanRepository, BrainScanRepository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
-            services.AddScoped<IClientRepository, ClientRepository>();
-            services.AddScoped<IDICOMServerRepository, DICOMServerRepository>();
-            services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+
         }
     }
 }

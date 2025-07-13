@@ -1,0 +1,64 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aspnet-Cancoly-a5d9564f-232e-444a-922a-e23f665328d8</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="BrainTumorSegmentationModel.consumption.cs" />
+    <Compile Remove="BrainTumorSegmentationModel.training.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove=".dockerignore" />
+    <None Remove="BrainTumorSegmentationModel.mbconfig" />
+    <None Remove="BrainTumorSegmentationModel.mlnet" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="BrainTumorModel.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DinkToPdf" Version="1.0.8" />
+    <PackageReference Include="DinkToPdfCopyDependencies" Version="1.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.11" />
+    <PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.ML" Version="4.0.0" />
+    <PackageReference Include="Microsoft.ML" Version="4.0.0" />
+    <PackageReference Include="Microsoft.ML.ImageAnalytics" Version="4.0.0" />
+    <PackageReference Include="Microsoft.ML.TorchSharp" Version="0.22.0" />
+    <PackageReference Include="Microsoft.ML.Vision" Version="4.0.0" />
+    <PackageReference Include="Microsoft.OpenApi" Version="1.6.22" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.3.1" />
+    <PackageReference Include="TorchSharp-cpu" Version="0.103.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Pages\Components\Administrator\" />
+    <Folder Include="wwwroot\storage\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Cancoly.Application\Cancoly.Application.csproj" />
+    <ProjectReference Include="..\Cancoly.Domain\Cancoly.Domain.csproj" />
+    <ProjectReference Include="..\Cancoly.Persistence\Cancoly.Persistence.csproj" />
+  </ItemGroup>
+  <ItemGroup Label="BrainTumorModel">
+    <None Include="BrainTumorModel.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="wwwroot\logo.png">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+</Project>

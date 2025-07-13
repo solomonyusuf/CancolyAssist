@@ -1,0 +1,162 @@
+﻿@page "/user-brain-scans"
+@model Cancoly.Pages.Components.Users.BrainScansModel
+@{
+    Layout = "_MainLayout";
+    var count = 1;
+
+    var max = 5;
+
+    if (User.IsInRole("Professional"))
+        max = 50;
+
+    if (User.IsInRole("Business"))
+        max = 100;
+
+}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="mb-3 text-center">Brain Scans</h4>
+    <button type="button" class="btn btn-outline-primary mb-4" data-bs-toggle="modal" data-bs-target="#exLargeModal">
+        New Scan
+    </button>
+    <div class="modal fade" id="exLargeModal" tabindex="-1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <form method="post" enctype="multipart/form-data" class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel4">Upload Brain Scan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6 mb-3">
+                            <input name="type" value="create" hidden />
+
+                            <label for="nameExLarge" class="form-label">Title</label>
+                            <input name="title" required type="text" id="nameExLarge" class="form-control" placeholder="Enter Name">
+                        </div>
+                        <div class="col-sm-6  mb-3">
+                            <label for="emailExLarge" class="form-label">Email</label>
+                            <input name="email" required type="text" id="emailExLarge" class="form-control" placeholder="xxxx@xxx.xx">
+                        </div>
+                    </div>
+                    <div class="row g-2 justify-content-center">
+                        <div class="mb-3 col-sm-12 mb-0">
+                            <div class="alert alert-warning">
+                                <h6 class="alert-heading fw-bold mb-1 text-uppercase text-dark">Warning</h6>
+                                <p class="mb-0 text-dark">
+                                    Ensure you only upload images associated with brain MRI scans, any attempt to upload otherwise may result in your account being banned from usage and may lead to gross mis-interpretation by the artificial intelligence.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="col-7 mb-0">
+                            <label for="emailExLarge" class="form-label">Files Upload <small>(max @max)</small></label>
+                            <input type="file" name="test" id="" accept=".jpg,.png,.jpeg,.gif" max="@max" multiple class="form-control">
+                        </div>
+
+                        <div class="row col-12 mt-2" id="fileDisplayArea">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row mb-12 g-6">
+        @if(Model.brainScans != null)
+        {
+            @foreach (var data in Model.brainScans)
+            {
+                <div class="col-md-3 col-lg-3 mb-3">
+                    <div class="card h-100">
+                        <img class="card-img-top" style="height:220px;" src="@(data.FilePaths.Split(',')[0])" alt="">
+                        <div class="card-body">
+                            <h5 class="card-title text-uppercase">@data.Title</h5>
+                            <p class="card-text">
+                            </p>
+                            <div class="row">
+                                <a style="margin:3px;" href="/user-scan-report?id=@data.Id" class="btn btn-outline-primary col mb-2">Report</a>
+                                <button style="margin:3px;" type="button" class="btn btn-outline-danger col mb-2" data-bs-toggle="modal" data-bs-target="#basicModal@(++count)">
+                                    Delete
+                                </button>
+                                <div class="modal fade" id="basicModal@(count)" tabindex="-1" style="display: none;" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <form method="post" class="modal-content">
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <input name="type" value="delete" hidden />
+                                                    <input name="id" value="@data.Id" hidden />
+                                                    <h5 class="text-center">Are you sure you want to delete?</h5>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                                    Close
+                                                </button>
+                                                <button type="submit" class="btn btn-danger">Save changes</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        }
+       
+    </div>
+</div>
+
+<script>
+      document.addEventListener('DOMContentLoaded', () => {
+      const fileInput = document.getElementById('fileInput');
+      const fileDisplayArea = document.getElementById('fileDisplayArea');
+
+      fileInput.addEventListener('change', () => {
+        // Clear the file display area
+        fileDisplayArea.innerHTML = '';
+
+        const files = Array.from(fileInput.files);
+
+        // Limit to 5 files
+        if (files.length > @(max)) {
+          alert('You can only upload up to 5 images.');
+          fileInput.value = ''; // Clear the input
+          return;
+        }
+
+        // Display images
+        files.forEach((file, index) => {
+          if (!file.type.startsWith('image/')) {
+            alert(`File ${file.name} is not an image. Please upload valid images.`);
+            return;
+          }
+
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            const col = document.createElement('div');
+            col.className = 'col-md-3 mb-3';
+
+            const img = document.createElement('img');
+            img.src = event.target.result;
+            img.alt = `Uploaded Image ${index + 1}`;
+            img.className = 'img-thumbnail';
+
+            col.appendChild(img);
+            fileDisplayArea.appendChild(col);
+          };
+
+          reader.readAsDataURL(file);
+        });
+      });
+    });
+</script>

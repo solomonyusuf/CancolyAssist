@@ -1,0 +1,128 @@
+﻿@page "/user-plans"
+@model Cancoly.Pages.Components.Users.UserPlanPageModel
+@{
+    Layout = "_MainLayout";
+}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="text-center mb-3">Pricing Plans</h4>
+   
+   
+    <div class="row g-6">
+        <!-- Basic -->
+        <div class="col-lg">
+            <div class="card border rounded shadow-none">
+                <div class="card-body pt-12 px-5">
+                    
+                    <h4 class="card-title text-center text-capitalize mb-1">Basic</h4>
+                    <p class="text-center mb-5">A simple start for everyone</p>
+                    <div class="text-center h-px-50">
+                        <div class="d-flex justify-content-center">
+                            <sup class="h6 text-body pricing-currency mt-2 mb-0 me-1">₦</sup>
+                            <h1 class="mb-0 text-primary">0</h1>
+                            <sub class="h6 text-body pricing-duration mt-auto mb-1 ms-1">/month</sub>
+                        </div>
+                    </div>
+
+                    <ul class="list-group my-5 pt-9">
+                        <li class="mb-4 d-flex align-items-center"><span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i class="bx bx-check bx-xs"></i></span><span>100 uploads a month</span> </li>
+                        <li class="mb-4 d-flex align-items-center"><span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i class="bx bx-check bx-xs"></i></span><span>No Technical Support</span> </li>
+                        <li class="mb-4 d-flex align-items-center"><span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i class="bx bx-check bx-xs"></i></span><span>No Payment Required</span> </li>
+                        <li class="mb-4 d-flex align-items-center"><span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i class="bx bx-check bx-xs"></i></span><span>5 Scans Concurrently</span> </li>
+                        <li class="mb-0 d-flex align-items-center"><span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i class="bx bx-check bx-xs"></i></span><span>No Downloadable Report</span> </li>
+                    </ul>
+                    @if(User.IsInRole("User"))
+                    {
+                        <a href="/user-plans" class="btn btn-label-success d-grid w-100">Your Current Plan</a>
+
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Pro -->
+        <div class="col-lg">
+            <div class="card border-primary border shadow-none">
+                <div class="card-body position-relative pt-4">
+
+                    <h4 class="card-title text-center text-capitalize mb-1">Professional</h4>
+                    <div style="margin-left:35%;" class="ml-4 end-0 me-5 top-0 mt-1">
+                        <span class="badge bg-label-primary rounded-1">Popular</span>
+                    </div>
+
+                    <p class="text-center mb-5">For small to medium businesses or professionals</p>
+                    <div class="text-center h-px-50">
+                        <div class="d-flex justify-content-center">
+                            <sup class="h6 text-body pricing-currency mt-2 mb-0 me-1">₦</sup>
+                            <h1 class="price-toggle price-yearly text-primary mb-0 d-none">7</h1>
+                            <h1 class="price-toggle price-monthly text-primary mb-0">10,000</h1>
+                            <sub class="h6 text-body pricing-duration mt-auto mb-1 ms-1">/month</sub>
+                        </div>
+                        <small class="price-yearly price-yearly-toggle text-muted d-none">USD 480 / year</small>
+                    </div>
+
+                    <ul class="list-group my-5 pt-9">
+                        <li class="mb-4 d-flex align-items-center"><span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i class="bx bx-check bx-xs"></i></span><span>10,000 uploads a month</span> </li>
+                        <li class="mb-4 d-flex align-items-center"><span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i class="bx bx-check bx-xs"></i></span><span> Technical Support</span> </li>
+                        <li class="mb-4 d-flex align-items-center"><span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i class="bx bx-check bx-xs"></i></span><span> Payment Required</span> </li>
+                        <li class="mb-4 d-flex align-items-center"><span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i class="bx bx-check bx-xs"></i></span><span>50 Scans Concurrently</span> </li>
+                        <li class="mb-0 d-flex align-items-center"><span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i class="bx bx-check bx-xs"></i></span><span> Downloadable Report</span> </li>
+                    </ul>
+                    @if(User.IsInRole("Professional"))
+                    {
+                        <a href="/user-plans" class="btn btn-label-success d-grid w-100">Your Current Plan</a>
+
+                    }
+                    else if (!User.IsInRole("Professional") && !User.IsInRole("Business"))
+                    {
+                        <form method="post">
+                            <input value="Professional" name="type" hidden/>
+                            <button type="submit" class="btn btn-primary d-grid w-100">Upgrade</button>
+                        </form>
+                        
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Enterprise -->
+        <div class="col-lg">
+            <div class="card border rounded shadow-none">
+                <div class="card-body pt-12">
+                     
+                    <h4 class="card-title text-center text-capitalize mb-1">Health Care</h4>
+                    <p class="text-center mb-5">Solution for big organizations</p>
+
+                    <div class="text-center h-px-50">
+                        <div class="d-flex justify-content-center">
+                            <sup class="h6 text-body pricing-currency mt-2 mb-0 me-1">₦</sup>
+                            <h1 class="price-toggle price-yearly text-primary mb-0 d-none">16</h1>
+                            <h1 class="price-toggle price-monthly text-primary mb-0">30,000</h1>
+                            <sub class="h6 text-body pricing-duration mt-auto mb-1 ms-1">/month</sub>
+                        </div>
+                   </div>
+                    <ul class="list-group my-5 pt-9">
+                        <li class="mb-4 d-flex align-items-center"><span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i class="bx bx-check bx-xs"></i></span><span>Unlimited uploads a month</span> </li>
+                        <li class="mb-4 d-flex align-items-center"><span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i class="bx bx-check bx-xs"></i></span><span>24/7 Technical Support</span> </li>
+                        <li class="mb-4 d-flex align-items-center"><span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i class="bx bx-check bx-xs"></i></span><span>Payment Required</span> </li>
+                        <li class="mb-4 d-flex align-items-center"><span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i class="bx bx-check bx-xs"></i></span><span>100 Scans Concurrently</span> </li>
+                        <li class="mb-0 d-flex align-items-center"><span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i class="bx bx-check bx-xs"></i></span><span>Downloadable Report</span> </li>
+                    </ul>
+                    @if (User.IsInRole("Business"))
+                    {
+                        <a href="/user-plans" class="btn btn-label-success d-grid w-100">Your Current Plan</a>
+
+                    }
+                    else if (!User.IsInRole("Professional") && !User.IsInRole("Business"))
+                    {
+                        <form method="post">
+                            <input value="Business" name="type" hidden />
+                            <button type="submit" class="btn btn-primary d-grid w-100">Upgrade</button>
+                        </form>
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

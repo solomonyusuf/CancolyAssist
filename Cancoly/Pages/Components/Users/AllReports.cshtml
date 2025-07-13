@@ -1,0 +1,45 @@
+﻿@page "/user-reports"
+@model Cancoly.Pages.Components.Users.AllReportsModel
+@{
+    Layout = "_MainLayout";
+}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <div class="row mb-4">
+        <div class="card mb-4">
+
+            <div class="card-body table-responsive">
+                <div class="card-title mb-3">
+                    <h4>All Reports</h4>
+                </div>
+                <table id="table" class="display table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Report</th>
+                            <th>Time Stamp</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.brainScans != null)
+                        {
+                            @foreach (var data in @Model.brainScans)
+                            {
+                                <tr>
+                                    <td>@data.Title</td>
+                                    <td>
+                                        <a href="/user-scan-report?id=@data.Id" class="btn btn-primary text-white">Report</a>
+                                    </td>
+                                    <td>@data.DateCreated</td>
+                                </tr>
+                            }
+                        }
+                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

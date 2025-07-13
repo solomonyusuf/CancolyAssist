@@ -1,0 +1,71 @@
+﻿@page "/account-login"
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+    Layout = "_AuthLayout";
+}
+
+<style>
+    .bg {
+        background: url( @("auth/images/auth/bg2.jpg") ) no-repeat center center fixed;
+        background-size: cover;
+        position: relative;
+    }
+</style>
+
+<div class="row justify-content-center w-100">
+    <div class="col-md-8 col-lg-6 col-xxl-3 auth-card">
+        <div class="card mb-0">
+            <div class="card-body">
+                <strong class="text-nowrap logo-img text-center d-block mb-5 w-100">
+                    <img src="@("/logo.png")" style="height:50px;">
+                </strong>
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-2 mt-2" role="alert"></div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.Email" required placeholder="Enter Organization Mail" type="text" class="form-control border border-primary" />
+                        <label>
+                            <i class="ti ti-user me-2 fs-4 text-primary"></i>
+                            <span class="border-start border-primary ps-3">Email</span>
+                        </label>
+                    </div>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.Password" required placeholder="Enter Password" type="password" class="form-control border border-primary" />
+                        <label>
+                            <i class="ti ti-lock me-2 fs-4 text-primary"></i>
+                            <span class="border-start border-primary ps-3">Password</span>
+                        </label>
+                    </div>
+                     <span asp-validation-for="Input.Password" class="text-danger"></span>
+
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <a class="text-primary fw-medium" href="/account-forgot-password">
+                            Forgot
+                            Password ?
+                        </a>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 py-3 mb-4 rounded-2">
+                        <i class="ti ti-send me-2 fs-4"></i>
+                        Sign In
+                    </button>
+                    <div class="d-flex align-items-center justify-content-center">
+                        <a class="text-primary fw-medium ms-2 badge bg-primary-subtle" href="/account-register">
+                            <i class="ti ti-user-plus me-2 fs-5"></i>
+                            Setup an account
+                        </a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

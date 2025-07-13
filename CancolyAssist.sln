@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cancoly.Domain", "Cancoly.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cancoly.Persistence", "Cancoly.Persistence\Cancoly.Persistence.csproj", "{376E64F5-8423-429C-9732-BA6687090359}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CancolyAPI", "CancolyAPI\CancolyAPI.csproj", "{DF7FDE96-0757-45B1-A966-1A90A84978EC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cancoly", "Cancoly\Cancoly.csproj", "{CA1E072A-EF07-4CF9-B206-6CF64E15991F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{376E64F5-8423-429C-9732-BA6687090359}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{376E64F5-8423-429C-9732-BA6687090359}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{376E64F5-8423-429C-9732-BA6687090359}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DF7FDE96-0757-45B1-A966-1A90A84978EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DF7FDE96-0757-45B1-A966-1A90A84978EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DF7FDE96-0757-45B1-A966-1A90A84978EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DF7FDE96-0757-45B1-A966-1A90A84978EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA1E072A-EF07-4CF9-B206-6CF64E15991F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA1E072A-EF07-4CF9-B206-6CF64E15991F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA1E072A-EF07-4CF9-B206-6CF64E15991F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA1E072A-EF07-4CF9-B206-6CF64E15991F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

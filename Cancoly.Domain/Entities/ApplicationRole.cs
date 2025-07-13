@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 namespace Cancoly.Domain.Entities
 {
     public class ApplicationRole : IdentityRole
-    {  
+    {
     }
 }

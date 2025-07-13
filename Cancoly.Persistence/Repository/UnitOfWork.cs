@@ -1,6 +1,8 @@
 ﻿using Cancoly.Application.IRepository;
+using Cancoly.Application.IRepository.All;
 using Cancoly.Domain.Entities;
 using Cancoly.Persistence.Context;
+using Cancoly.Persistence.Repository.All;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -13,7 +15,6 @@ namespace Cancoly.Persistence.Repository
     public class UnitOfWork : IUnitOfWork
     {
         private MainDbContext _mainDbContext;
-
         private UserManager<ApplicationUser> _userManager;
 
         public UnitOfWork(MainDbContext mainDbContext, UserManager<ApplicationUser> userManager)
@@ -24,23 +25,15 @@ namespace Cancoly.Persistence.Repository
 
         INotificationRepository IUnitOfWork.NotificationRepository => new NotificationRepository(_mainDbContext);
 
-        IScanRepository IUnitOfWork.BrainScanRepository => new ScanRepository(_mainDbContext);
+        IBrainScanRepository IUnitOfWork.BrainScanRepository => new BrainScanRepository(_mainDbContext);
 
-        IUserRepository IUnitOfWork.UserRepository => new UserRepository(_userManager, _mainDbContext);
+        IAuthRepository IUnitOfWork.AuthRepository => new AuthRepository(_userManager);
 
         ITransactionRepository IUnitOfWork.TransactionRepository => new TransactionRepository(_mainDbContext);
 
-        IClientRepository IUnitOfWork.ClientRepository => new ClientRepository(_mainDbContext);
-
-        IDICOMServerRepository IUnitOfWork.DICOMServerRepository => new DICOMServerRepository(_mainDbContext);
-
-        IOrganizationRepository IUnitOfWork.OrganizationRepository => new OrganizationRepository(_mainDbContext);
-
-        IScanUploadRepository IUnitOfWork.ScanUploadRepository => new ScanUploadRepository(_mainDbContext);
-
-        void IUnitOfWork.Save()
+        Task IUnitOfWork.Save()
         {
-           _mainDbContext.SaveChanges();
+            return _mainDbContext.SaveChangesAsync();
         }
 
         void IDisposable.Dispose()

@@ -1,7 +1,6 @@
 ﻿using Cancoly.Application.IRepository;
 using Cancoly.Domain.Common;
 using Cancoly.Persistence.Context;
-using EntityFrameworkPaginateCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

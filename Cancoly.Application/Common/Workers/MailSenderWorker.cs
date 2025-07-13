@@ -56,7 +56,7 @@ namespace Cancoly.Application.Common.Workers
                             }
 
                             _unitOfWork.NotificationRepository.BulkUpdate(alerts);
-                            _unitOfWork.Save();
+                            await _unitOfWork.Save();
                         }
                     }
                     catch (Exception ex)

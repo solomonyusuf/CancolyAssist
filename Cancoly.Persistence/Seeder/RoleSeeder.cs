@@ -10,30 +10,40 @@ namespace Cancoly.Persistence.Seeder
             try
             {
                 if (!roleManager.RoleExistsAsync
-                 ("Radiologist").Result)
+                 ("User").Result)
                 {
                     var role = new ApplicationRole();
-                    role.Name = "Radiologist";
+                    role.Name = "User";
                     IdentityResult roleResult = roleManager.
                     CreateAsync(role).Result;
                 }
                 if (!roleManager.RoleExistsAsync
-                 ("ChiefRadiologist").Result)
+                 ("Professional").Result)
                 {
                     var role = new ApplicationRole();
-                    role.Name = "ChiefRadiologist";
+                    role.Name = "Professional";
                     IdentityResult roleResult = roleManager.
                     CreateAsync(role).Result;
                 }
                 
                 if (!roleManager.RoleExistsAsync
-                 ("SuperRadiologist").Result)
+                 ("Business").Result)
                 {
                     var role = new ApplicationRole();
-                    role.Name = "SuperRadiologist";
+                    role.Name = "Business";
                     IdentityResult roleResult = roleManager.
                     CreateAsync(role).Result;
                 }
+
+                if (!roleManager.RoleExistsAsync
+                    ("Admin").Result)
+                {
+                    var role = new ApplicationRole();
+                    role.Name = "Admin";
+                    IdentityResult roleResult = roleManager.
+                    CreateAsync(role).Result;
+                }
+
               
             }
             catch (Exception e)

@@ -12,6 +12,10 @@ namespace Cancoly.Domain.Entities
 {
     public class Transaction: BaseEntity
     {
+        public ApplicationUser User { get; set; }
+
+        [ForeignKey("User")]
+        public string UserId { get; set; }
 
         public Guid? ConstrainId { get; set; }
 

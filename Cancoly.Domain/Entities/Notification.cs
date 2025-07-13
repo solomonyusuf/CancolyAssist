@@ -10,7 +10,10 @@ using System.Threading.Tasks;
 namespace Cancoly.Domain.Entities
 {
     public class Notification : BaseEntity
-    {    
+    {
+        [ForeignKey("User")]
+        public string? UserId { get; set; }
+        public ApplicationUser User { get; set; }       
         public string Title { get; set; }
         public string Message { get; set; }
         [MaxLength(300000)]

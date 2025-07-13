@@ -1,0 +1,59 @@
+﻿@{
+    string tabler = "https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Title -->
+    <title>@ViewData["Title"] - Cancoly</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="icon.png">
+    <link rel="stylesheet" href="auth/css/styles.css">
+    <link rel="stylesheet" href="@tabler">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+</head>
+
+<body>
+    <style>
+        .preloader {
+            background: url("auth/images/auth/bg2.jpg") no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+        }
+    </style>
+    <div id="main-wrapper" class="auth-customizer-none">
+        <div class="position-relative overflow-hidden bg min-vh-100 w-100 d-flex align-items-center justify-content-center">
+            <div class="d-flex align-items-center justify-content-center w-100">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    @await RenderSectionAsync("Scripts", required: false)
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="auth/js/vendor.min.js"></script>
+    <!-- Import Js Files -->
+    <script src="auth/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="auth/libs/simplebar/dist/simplebar.min.js"></script>
+    <script src="auth/js/theme/app.init.js"></script>
+    <script src="auth/js/theme/theme.js"></script>
+    <script src="auth/js/theme/app.min.js"></script>
+    @if (TempData["AlertMessage"] != null)
+    {
+        <script>
+            Swal.fire({
+                title: '@TempData["AlertSubject"]!',
+                text: '@TempData["AlertMessage"]',
+                icon: '@TempData["AlertType"]',
+                confirmButtonText: 'Got it!'
+            });
+        </script>
+    }
+
+</body>
+</html>

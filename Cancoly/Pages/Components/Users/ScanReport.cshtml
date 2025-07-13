@@ -1,0 +1,51 @@
+﻿@page "/user-scan-report"
+@model Cancoly.Pages.Components.Users.ScanReportModel
+@{
+    Layout = "_MainLayout";
+}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-2">
+        Scan Report #@(string.Join("", Model.Id.Take(8)))  
+        <form method="post" target="_blank">
+            <input name="id" hidden value="@Model.Id"/>
+            <button type="submit" style="margin-left:60%;" class="btn btn-danger mb-3 text-white">Generate PDF</button>
+        </form>
+    </h4>
+    <div class="row">
+        <div class="col-12">
+           
+            <div class="card mb-4">
+
+                <h5 class="card-header text-uppercase"><img class="mb-2" style="height:30px;" src="~/logo.png"/></h5>
+                <h5 class="card-header text-uppercase">@Model.Scan.Title</h5>
+                
+                <div class="card-body">
+                    <div class="d-grid d-sm-flex p-3 border mb-2">
+                        <div class="row col-12">
+                            <div class="col-6 mb-2">
+                                <p><strong>First Name: </strong>@Model.Appuser.FirstName</p>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <p><strong>Last Name: </strong>@Model.Appuser.LastName</p>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <p><strong>Scan Email: </strong>@Model.Appuser.Email</p>
+                            </div>
+                        </div>
+                    </div>
+                    @for (int i = 0; i < Model.Scan.FilePaths.Split(",").Length; i++)
+                    {
+                        <div class="d-grid d-sm-flex p-3 mb-1 border">
+                            <img src="@Model.Scan.FilePaths.Split(",")[i]" alt="collapse-image" height="125" class="me-4 mb-sm-0 mb-2">
+                            <span>
+                                @Model.Scan.Score.Split(",")[i] %, @Model.Scan.Label.Split(",")[i].Replace("_", " "). @(Model.AnalyzeSeverity(double.Parse(Model.Scan.Score.Split(",")[i]), Model.Scan.Label.Split(",")[i].Replace("_", " ")))
+                            </span>
+                        </div>
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

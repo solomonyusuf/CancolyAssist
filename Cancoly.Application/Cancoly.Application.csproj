@@ -1,29 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>disable</Nullable>
-    <NoWarn>SYSLIB0023</NoWarn>
-	  <NoWarn>CS8669</NoWarn>
-	  <NoWarn>CS1998</NoWarn>
-	  <NoWarn> CS8632</NoWarn>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="DinkToPdf" Version="1.0.8" />
-    <PackageReference Include="DinkToPdfCopyDependencies" Version="1.0.8" />
+    <Folder Include="Common\Exceptions\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.ML" Version="4.0.0" />
-    <PackageReference Include="Microsoft.ML" Version="4.0.0" />
     <PackageReference Include="Microsoft.ML.Vision" Version="4.0.0" />
-    <PackageReference Include="OpenAI" Version="2.1.0" />
     <PackageReference Include="Paystack.Net" Version="1.1.1" />
-    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.3.1" />
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Cancoly.Domain\Cancoly.Domain.csproj" />
   </ItemGroup>
+
 </Project>

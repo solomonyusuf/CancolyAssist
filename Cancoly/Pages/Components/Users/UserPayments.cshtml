@@ -1,0 +1,47 @@
+﻿@page "/user-payments"
+@model Cancoly.Pages.Components.Users.UserPaymentsModel
+@{
+    Layout = "_MainLayout";
+}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <div class="row mb-4">
+        <div class="card mb-4">
+
+            <div class="card-body table-responsive">
+                <div class="card-title mb-3">
+                    <h4>All Paymets</h4>
+                </div>
+                <table id="table" class="display table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Service Plan</th>
+                            <th>Amount</th>
+                            <th>Charge</th>
+                            <th>Status</th>
+                            <th>Time Stamp</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Transactions != null)
+                        {
+                            @foreach (var data in @Model.Transactions)
+                            {
+                                <tr>
+                                    <td>@data.Service</td>
+                                    <td>@data.Currency @data.Amount.ToString("N")</td>
+                                    <td>@data.Currency @((data.Charge / 100).ToString("N"))</td>
+                                    <td>@data.Status</td>
+                                    <td>@data.DateCreated</td>
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

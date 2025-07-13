@@ -1,0 +1,94 @@
+﻿@page "/account-register"
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = "_AuthLayout";
+}
+
+<style>
+    .bg {
+        background: url( @("auth/images/auth/bg2.jpg") ) no-repeat center center fixed;
+        background-size: cover;
+        position: relative;
+    }
+</style>
+
+<div class="row justify-content-center w-100">
+    <div class="col-md-8 col-lg-6 col-xxl-3 auth-card">
+        <div class="card mb-0">
+            <div class="card-body">
+                <strong class="text-nowrap logo-img text-center d-block mb-5 w-100">
+                    <img src="@("/logo.png")" style="height:50px;">
+                </strong>
+
+                <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-2 mt-2" role="alert"></div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.FirstName" required placeholder="Enter First Name" type="text" class="form-control border border-primary" />
+                        <label>
+                            <i class="ti ti-user-circle me-2 fs-4 text-primary"></i>
+                            <span class="border-start border-primary ps-3">First Name</span>
+                        </label>
+                    </div>
+                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.LastName" required placeholder="Enter Last Name" type="text" class="form-control border border-primary" />
+                        <label>
+                            <i class="ti ti-user-check me-2 fs-4 text-primary"></i>
+                            <span class="border-start border-primary ps-3">Last Name</span>
+                        </label>
+                    </div>
+                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.Email" required placeholder="Enter Organization Mail" type="text" class="form-control border border-primary" />
+                        <label>
+                            <i class="ti ti-user me-2 fs-4 text-primary"></i>
+                            <span class="border-start border-primary ps-3">Email</span>
+                        </label>
+                    </div>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.Password" required placeholder="Enter Password" type="password" class="form-control border border-primary" />
+                        <label>
+                            <i class="ti ti-lock me-2 fs-4 text-primary"></i>
+                            <span class="border-start border-primary ps-3">Password</span>
+                        </label>
+                    </div>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    
+                    
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.ConfirmPassword" required placeholder="Repeat Password" type="password" class="form-control border border-primary" />
+                        <label>
+                            <i class="ti ti-lock me-2 fs-4 text-primary"></i>
+                            <span class="border-start border-primary ps-3">Confirm Password</span>
+                        </label>
+                    </div>
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+
+                    <button type="submit" class="btn btn-primary w-100 py-3 mb-4 rounded-2">
+                        <i class="ti ti-send me-2 fs-4"></i>
+                        Sign Up
+                    </button>
+
+                    <div class="d-flex align-items-center justify-content-center">
+                        <a class="text-primary fw-medium ms-2 badge bg-primary-subtle" href="/account-login">
+                            <i class="ti ti-corner-down-left-double me-2 fs-4"></i>
+                            Go back
+                        </a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
