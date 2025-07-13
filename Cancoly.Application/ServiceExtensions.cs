@@ -16,7 +16,7 @@ namespace Cancoly.Application
 
             //workers
             services.AddHostedService<MailSenderWorker>();
-            services.AddHostedService<TumorClassifierWorkerdded tumor cl>();
+            services.AddHostedService<TumorClassifierWorker>();
         }
     }
 }
