@@ -14,6 +14,7 @@ using System;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Cancoly.Pages.Components.Users
 {
@@ -40,6 +41,8 @@ namespace Cancoly.Pages.Components.Users
             _httpClient = httpClient;
             _brainScanService = brainScanService;
         }
+
+        public Guid Id { get; set; }
 
         public List<BrainScan> brainScans { get; set; }
         
@@ -121,30 +124,41 @@ namespace Cancoly.Pages.Components.Users
                     {
                         var user = await _userManager.FindByEmailAsync(User.Identity.Name);
 
-                        var file = await _fileService.UploadFile(Request.Form.Files.ToList());
-
-                        var scanResult = await _brainScanService.UploadScans(file);
+                        var files = await _fileService.UploadFile(Request.Form.Files.ToList());
 
                         var scan = new BrainScan();
-                        var scores = new List<double>();
-                        var labels = new List<string>();
-
-                        foreach (var item in scanResult)
-                        {
-                            var score = (Math.Max(Math.Max(item.Score[0], item.Score[1]), Math.Max(item.Score[2], item.Score[3]))) * 100;
-                            labels.Add(item.PredictedLabel);
-                            scores.Add(score);
-                        }
 
                         scan.Title = Request.Form["title"];
                         scan.Email = Request.Form["email"];
                         scan.UserId = user.Id;
-                        scan.FilePaths = string.Join(',', file);
-                        scan.Score = string.Join(',', scores);
-                        scan.Label = string.Join(',', labels);
+                        //scan.FilePaths = string.Join(',', file);
+                        //scan.Score = string.Join(',', scores);
+                        //scan.Label = string.Join(',', labels);
                         scan.Report = "";
 
-                        _unitOfWork.BrainScanRepository.Create(scan);
+
+                        var response = _unitOfWork.BrainScanRepository.Create(scan);
+                        await _unitOfWork.Save();
+
+                        Id = response.Id;
+                        var date = DateTime.UtcNow.Date;
+                        var folder = $"{date:dd-MM-yyyy}";
+
+                        foreach (var item in files)
+                        {
+                            var fileName = Path.GetFileName(item);
+                            var url = $"{Request.Scheme}://{Request.Host}/coly.cdn.storage/{folder}/{fileName}";
+
+                            var scanUpload = new ScanUpload
+                            {
+                                ImageUrl = url,
+                                FilePath = item
+                            };
+
+                            _unitOfWork.ScanUploadRepository.Create(scanUpload);
+                        }
+
+                        // Save once after all inserts (better performance)
                         await _unitOfWork.Save();
 
                         TempData["AlertSubject"] = "Creation Successful";
@@ -160,7 +174,7 @@ namespace Cancoly.Pages.Components.Users
                 Console.WriteLine(ex);  
             }
 
-            return Redirect("/user-brain-scans");
+            return Redirect($"/user-scan-report?id={Id}");
         }
 
 
