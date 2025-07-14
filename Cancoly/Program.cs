@@ -21,7 +21,6 @@ using DinkToPdf.Contracts;
 using DinkToPdf;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Http.Features;
-using Cancoly.MachineLearning;
 using Cancoly.Persistence;
 using Microsoft.ML;
 
@@ -40,16 +39,10 @@ builder.Services.ConfigurePersistence(connectionString);
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddPredictionEnginePool<BrainTumorModel.ModelInput, BrainTumorModel.ModelOutput>()
-  .FromFile(Path.Combine("BrainTumorModel.mlnet"));
-
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<ApplicationRole>()
     .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<ApplicationDbContext>();
-
-// Register ML Service
-builder.Services.AddTransient<BrainScanML>();
 
 builder.Services.AddHttpClient();
 

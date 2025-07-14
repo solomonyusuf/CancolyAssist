@@ -15,7 +15,7 @@ namespace Cancoly.Domain.Entities
         public string? UserId { get; set; }
         public ApplicationUser User { get; set; }
         [MaxLength(30000)]
-        public string FilePaths { get; set; }
+        public string? FilePaths { get; set; }
         public string? Email { get; set; }
         public string? Title { get; set; }
         public string? Label { get; set; }

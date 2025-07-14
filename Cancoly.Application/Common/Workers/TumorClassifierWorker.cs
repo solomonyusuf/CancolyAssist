@@ -51,17 +51,21 @@ namespace Cancoly.Application.Common.Workers
                                     var uploads = await _unitOfWork.ScanUploadRepository.Query()
                                                                    .Where(x => x.BrainScanId == item.Id)
                                                                    .ToListAsync();
-                                    foreach (var upload in uploads)
+                                    if(uploads != null)
                                     {
+                                        foreach (var upload in uploads)
+                                        {
 
-                                      var payload = await _openai.GenerateOutput(upload.FilePath);
+                                            var payload = await _openai.GenerateOutput(upload.FilePath);
 
-                                        upload.Pending = false;
-                                        upload.Report = payload.description;
-                                        upload.Location = payload.tumor_location;
-                                        upload.Size = payload.tumor_size;
-                                        upload.Label = payload.tumor_type;
-                                        upload.Stage = payload.tumor_stage;
+                                            upload.Pending = false;
+                                            upload.Report = payload.description;
+                                            upload.Location = payload.tumor_location;
+                                            upload.Size = payload.tumor_size;
+                                            upload.Label = payload.tumor_type;
+                                            upload.Stage = payload.tumor_stage;
+
+                                        }
 
                                     }
 

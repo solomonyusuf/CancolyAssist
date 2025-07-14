@@ -3,7 +3,6 @@ using Cancoly.Application.Common.DTOs;
 using Cancoly.Application.Features;
 using Cancoly.Application.IRepository;
 using Cancoly.Domain.Entities;
-using Cancoly.MachineLearning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -25,21 +24,18 @@ namespace Cancoly.Pages.Components.Users
         private UploadFileService _fileService;
         private UserManager<ApplicationUser> _userManager;
         private HttpClient _httpClient;
-        private BrainScanML _brainScanService;
-
+ 
         public BrainScansModel(
             UploadFileService fileService,
              IUnitOfWork unitOfWork,
              UserManager<ApplicationUser> userManager,
-             HttpClient httpClient,
-             BrainScanML brainScanService
+             HttpClient httpClient
             )
         {
             _fileService = fileService;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
             _httpClient = httpClient;
-            _brainScanService = brainScanService;
         }
 
         public Guid Id { get; set; }
@@ -131,9 +127,9 @@ namespace Cancoly.Pages.Components.Users
                         scan.Title = Request.Form["title"];
                         scan.Email = Request.Form["email"];
                         scan.UserId = user.Id;
-                        //scan.FilePaths = string.Join(',', file);
-                        //scan.Score = string.Join(',', scores);
-                        //scan.Label = string.Join(',', labels);
+                        scan.FilePaths = string.Join(',', files);
+                        scan.Score = string.Empty;
+                        scan.Label = string.Empty;
                         scan.Report = "";
 
 
@@ -143,6 +139,8 @@ namespace Cancoly.Pages.Components.Users
                         Id = response.Id;
                         var date = DateTime.UtcNow.Date;
                         var folder = $"{date:dd-MM-yyyy}";
+
+                        var uploads = new List<ScanUpload>();
 
                         foreach (var item in files)
                         {
@@ -155,10 +153,11 @@ namespace Cancoly.Pages.Components.Users
                                 FilePath = item
                             };
 
-                            _unitOfWork.ScanUploadRepository.Create(scanUpload);
+                            uploads.Add(scanUpload);
+                            
                         }
 
-                        // Save once after all inserts (better performance)
+                        _unitOfWork.ScanUploadRepository.BulkCreate(uploads);
                         await _unitOfWork.Save();
 
                         TempData["AlertSubject"] = "Creation Successful";

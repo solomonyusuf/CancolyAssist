@@ -16,11 +16,6 @@
     <None Remove="BrainTumorSegmentationModel.mlnet" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="BrainTumorModel.mlnet">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="DinkToPdf" Version="1.0.8" />
     <PackageReference Include="DinkToPdfCopyDependencies" Version="1.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.11" />
@@ -49,11 +44,6 @@
     <ProjectReference Include="..\Cancoly.Application\Cancoly.Application.csproj" />
     <ProjectReference Include="..\Cancoly.Domain\Cancoly.Domain.csproj" />
     <ProjectReference Include="..\Cancoly.Persistence\Cancoly.Persistence.csproj" />
-  </ItemGroup>
-  <ItemGroup Label="BrainTumorModel">
-    <None Include="BrainTumorModel.mlnet">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Update="wwwroot\logo.png">

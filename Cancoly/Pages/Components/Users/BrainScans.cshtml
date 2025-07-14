@@ -50,7 +50,7 @@
                         
                         <div class="col-7 mb-0">
                             <label for="emailExLarge" class="form-label">Files Upload <small>(max @max)</small></label>
-                            <input type="file" name="test" id="" accept=".jpg,.png,.jpeg,.gif" max="@max" multiple class="form-control">
+                            <input type="file" name="test" id="fileInput" accept=".jpg,.png,.jpeg,.dcm,application/dicom" max="@max" multiple class="form-control">
                         </div>
 
                         <div class="row col-12 mt-2" id="fileDisplayArea">
@@ -115,48 +115,49 @@
        
     </div>
 </div>
+  @section Scripts {
+    <script>
+            document.addEventListener('DOMContentLoaded', () => {
+            const fileInput = document.getElementById('fileInput');
+            const fileDisplayArea = document.getElementById('fileDisplayArea');
 
-<script>
-      document.addEventListener('DOMContentLoaded', () => {
-      const fileInput = document.getElementById('fileInput');
-      const fileDisplayArea = document.getElementById('fileDisplayArea');
+            fileInput.addEventListener('change', () => {
+            // Clear the file display area
+            fileDisplayArea.innerHTML = '';
 
-      fileInput.addEventListener('change', () => {
-        // Clear the file display area
-        fileDisplayArea.innerHTML = '';
+            const files = Array.from(fileInput.files);
 
-        const files = Array.from(fileInput.files);
+            // Limit to 5 files
+            if (files.length > @(max)) {
+                alert(`You can only upload up to @(max) images.`);
+                fileInput.value = ''; // Clear the input
+                return;
+            }
 
-        // Limit to 5 files
-        if (files.length > @(max)) {
-          alert('You can only upload up to 5 images.');
-          fileInput.value = ''; // Clear the input
-          return;
-        }
+            // Display images
+            files.forEach((file, index) => {
+                if (!file.type.startsWith('image/')) {
+                alert(`File ${file.name} is not an image. Please upload valid images.`);
+                return;
+                }
 
-        // Display images
-        files.forEach((file, index) => {
-          if (!file.type.startsWith('image/')) {
-            alert(`File ${file.name} is not an image. Please upload valid images.`);
-            return;
-          }
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                const col = document.createElement('div');
+                col.className = 'col-md-3 mb-3';
 
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            const col = document.createElement('div');
-            col.className = 'col-md-3 mb-3';
+                const img = document.createElement('img');
+                img.src = event.target.result;
+                img.alt = `Uploaded Image ${index + 1}`;
+                img.className = 'img-thumbnail rounded';
+                img.style ='height:157px;width:157px;';
+                col.appendChild(img);
+                fileDisplayArea.appendChild(col);
+                };
 
-            const img = document.createElement('img');
-            img.src = event.target.result;
-            img.alt = `Uploaded Image ${index + 1}`;
-            img.className = 'img-thumbnail';
-
-            col.appendChild(img);
-            fileDisplayArea.appendChild(col);
-          };
-
-          reader.readAsDataURL(file);
+                reader.readAsDataURL(file);
+            });
+            });
         });
-      });
-    });
-</script>
+    </script>
+    }

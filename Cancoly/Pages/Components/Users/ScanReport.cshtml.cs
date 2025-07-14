@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using PayStack.Net;
 using System.Security.Policy;
 using static Tensorflow.TensorShapeProto.Types;
 
@@ -28,8 +30,19 @@ namespace Cancoly.Pages.Components.Users
             _unitOfWork = unitOfWork;
             _userManager = userManager;
         }
+
         public string Id { get; set; }
+        
+        public bool Status { get; set; }
+
+        public int complete { get; set; }
+
+        public int pending { get; set; }
+
+        public List<ScanUpload> uploads { get; set; }
        
+        public ScanUpload current { get; set; }
+
         public BrainScan Scan { get; set; }
         
         public ApplicationUser Appuser { get; set; }
@@ -41,8 +54,15 @@ namespace Cancoly.Pages.Components.Users
                 this.Id = Id;
                 Scan = await _unitOfWork.BrainScanRepository.Get(Guid.Parse(Id));
                 Appuser = await _userManager.FindByNameAsync(User.Identity.Name);
+                Status = Scan.isComplete;
+                uploads = await _unitOfWork.ScanUploadRepository.Query()
+                                            .Where(x => x.BrainScanId == Scan.Id)
+                                            .ToListAsync();
+                current = uploads[0] ?? null;
+
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             { 
                 Console.WriteLine(ex);
             }
