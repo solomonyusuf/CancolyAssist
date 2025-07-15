@@ -12,6 +12,8 @@ namespace Cancoly.Domain.Entities
         public string? Image { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string CompanyName { get; set; }
+        public string CompanyLogo { get; set; }
         public DateTimeOffset DateCreated { get; set; } = DateTimeOffset.Now;
         public DateTimeOffset DateUpdated { get; set; } = DateTimeOffset.Now;
     }

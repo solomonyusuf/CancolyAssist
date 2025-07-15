@@ -3,6 +3,7 @@
 @inject LayoutDbContext _unitOfWork
 @{
     var user = await _unitOfWork.User.Where(x=> x.Email == User.Identity.Name).FirstAsync();
+    var tabler = "https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css";
 }
 <!DOCTYPE html>
 <!-- beautify ignore:start -->
@@ -11,8 +12,6 @@
   class="light-style"
   dir="ltr"
   data-theme="theme-default"
-  data-assets-path="assets/"
-  data-template="vertical-menu-template-free"
 >
   <head>
     <meta charset="utf-8" />
@@ -36,6 +35,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="@tabler">
 
     <!-- Icons. Uncomment required icon fonts -->
     <link rel="stylesheet" href="assets/vendor/fonts/boxicons.css" />
@@ -54,10 +54,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <!-- Helpers -->
     <script src="assets/vendor/js/helpers.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.7/dist/cdn.min.js"></script>
 
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="assets/js/config.js"></script>
+    <style>
+        .bg-plane{
+            background:#151b94;
+        }
+    </style>
   </head>
 
   <body>
@@ -163,7 +169,7 @@
         <!-- / Menu -->
 
         <!-- Layout container -->
-        <div class="layout-page">
+        <div class="layout-page" style="height:100vh;overflow:scroll;">
           <!-- Navbar -->
 
           <nav

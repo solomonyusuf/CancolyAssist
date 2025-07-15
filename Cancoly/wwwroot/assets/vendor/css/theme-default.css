@@ -104,7 +104,7 @@
 }
 
 .bg-primary {
-  background-color: #696cff !important;
+    background-color: #151b94 !important;
 }
 
 a.bg-primary:hover, a.bg-primary:focus {
@@ -206,10 +206,10 @@ button.list-group-item-primary.active {
 }
 
 .btn-primary {
-  color: #fff;
-  background-color: #696cff;
-  border-color: #696cff;
-  box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
+    color: #fff;
+    background-color: #151b94;
+    border-color: #151b94;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
 }
 .btn-primary:hover {
   color: #fff;
@@ -748,7 +748,7 @@ html:not(.layout-menu-collapsed) .bg-menu-theme .menu-inner .menu-item .menu-lin
   background-color: rgba(67, 89, 113, 0.04);
 }
 .bg-menu-theme .menu-inner .menu-sub > .menu-item.active .menu-icon {
-  color: #696cff;
+    color: #151b94;
 }
 .bg-menu-theme .menu-inner > .menu-item.active > .menu-link {
   color: #696cff;

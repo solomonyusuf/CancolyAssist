@@ -138,23 +138,24 @@ namespace Cancoly.Pages.Components.Users
 
                         Id = response.Id;
                         var date = DateTime.UtcNow.Date;
-                        var folder = $"{date:dd-MM-yyyy}";
+                        var folder = $"{date.Day}-{date.Month}-{date.Year}";
 
                         var uploads = new List<ScanUpload>();
 
                         foreach (var item in files)
                         {
                             var fileName = Path.GetFileName(item);
-                            var url = $"{Request.Scheme}://{Request.Host}/coly.cdn.storage/{folder}/{fileName}";
+                            var url = $"{Request.Scheme}://{Request.Host}/storage/{folder}/{fileName}";
 
                             var scanUpload = new ScanUpload
                             {
+                                BrainScanId = response.Id,
                                 ImageUrl = url,
                                 FilePath = item
                             };
 
                             uploads.Add(scanUpload);
-                            
+
                         }
 
                         _unitOfWork.ScanUploadRepository.BulkCreate(uploads);
@@ -165,6 +166,8 @@ namespace Cancoly.Pages.Components.Users
                         TempData["AlertType"] = "success";
 
                     });
+
+                    return Redirect($"/user-scan-report?id={Id}");
                 }
                
             }
@@ -173,7 +176,7 @@ namespace Cancoly.Pages.Components.Users
                 Console.WriteLine(ex);  
             }
 
-            return Redirect($"/user-scan-report?id={Id}");
+            return Redirect("/user-brain-scans");
         }
 
 

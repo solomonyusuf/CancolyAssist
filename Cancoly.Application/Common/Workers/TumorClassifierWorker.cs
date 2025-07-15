@@ -40,7 +40,7 @@ namespace Cancoly.Application.Common.Workers
                 {
                     try
                     {
-                        var scans = await _unitOfWork.BrainScanRepository.Query().Where(x=> x.isComplete == false || x.isComplete == null).Take(5).ToListAsync();
+                        var scans = await _unitOfWork.BrainScanRepository.Query().Where(x=> x.isComplete == false).Take(5).ToListAsync();
                        
                         if (scans != null)
                         {
@@ -64,6 +64,7 @@ namespace Cancoly.Application.Common.Workers
                                             upload.Size = payload.tumor_size;
                                             upload.Label = payload.tumor_type;
                                             upload.Stage = payload.tumor_stage;
+                                            upload.Confidence = payload.confidence;
 
                                         }
 

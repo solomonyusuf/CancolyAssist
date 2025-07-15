@@ -42,8 +42,7 @@ namespace Cancoly.Pages.Components.Users
         }
 
 
-        [MethodImpl(MethodImplOptions.NoOptimization)]
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPost()
         {
             try
             {
@@ -54,11 +53,12 @@ namespace Cancoly.Pages.Components.Users
                     
                     if(Request.Form.Files.Any())
                     {
-                        var image = Request.Form.Files[0];
+                        var image = Request.Form.Files["image"];
+                        var image2 = Request.Form.Files["logo"];
 
-                        if (image != null)
+                        if (image != null || image2 != null)
                         {
-                            if (image.Length > 4145728)
+                            if (image.Length > 4145728 || image2.Length > 4145728)
                             {
                                 TempData["AlertSubject"] = $"Image Size Exceeded";
                                 TempData["AlertMessage"] = "The accepted image size is a max of 3mb, allowed files are jpg, png, jpeg ";
@@ -66,7 +66,8 @@ namespace Cancoly.Pages.Components.Users
 
                                 return Redirect("/account-profile");
                             }
-                            AppUser.Image = _uploadService.UploadFile(new List<IFormFile> { image }).Result[0];
+                            AppUser.Image = _uploadService.GetFileUrl(new List<IFormFile> { image }).Result[0];
+                            AppUser.CompanyLogo = _uploadService.GetFileUrl(new List<IFormFile> { image }).Result[0];
                         }
 
                     }
@@ -78,7 +79,8 @@ namespace Cancoly.Pages.Components.Users
                     AppUser.FirstName = Request.Form["first_name"];
                     AppUser.LastName = Request.Form["last_name"];
                     AppUser.PhoneNumber = Request.Form["phone_no"];
-
+                    AppUser.CompanyName = Request.Form["company"];
+                   
                     await _manager.UpdateAsync(AppUser);
 
                     TempData["AlertSubject"] = $"Account Updated";

@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Http.Features;
 using Cancoly.Persistence;
 using Microsoft.ML;
+using Microsoft.AspNetCore.StaticFiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,12 +71,6 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
-builder.Services.AddResponseCompression(opts =>
-{
-    opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
-        new[] { "application/octet-stream" });
-});
-
 builder.Services.AddLogging(x =>
 {
     x.AddConsole();
@@ -122,13 +117,24 @@ else
 }
 
 app.UseStaticFiles();
+
+var provider = new FileExtensionContentTypeProvider();
+provider.Mappings[".dcm"] = "application/dicom";
+
 app.UseStaticFiles(new StaticFileOptions()
 {
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot", "storage")),
-    RequestPath = new PathString("/coly.cdn.storage")
+    RequestPath = new PathString("/storage"),
+    ContentTypeProvider = provider
 });
 
-app.UseResponseCompression();
+app.UseDirectoryBrowser(new DirectoryBrowserOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "storage")),
+    RequestPath = "/storage"
+});
+
 
 app.UseSession();
 

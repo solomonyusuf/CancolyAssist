@@ -55,6 +55,7 @@ namespace Cancoly.Application.Features
                         @"Your response must strictly follow this JSON structure:
                         {
                           ""status"": ""tumor_present"" | ""no_tumor"",
+                          ""confidence"": 70% write your estimated score in percentage,
                           ""tumor_type"": ""no_tumor"" | ""glioma"" | ""meningioma"" | ""pituitary"",
                           ""tumor_size"": ""Provide an estimated size (e.g., small, moderate, large)"",
                           ""tumor_stage"": ""e.g., early-stage, mid-stage, late-stage"",

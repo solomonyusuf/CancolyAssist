@@ -21,6 +21,6 @@ namespace Cancoly.Domain.Entities
         public string? Label { get; set; }
         public string? Score { get; set; }
         public string? Report { get; set; }
-        public bool isComplete { get; set; } 
+        public bool isComplete { get; set; } = false;
     }
 }

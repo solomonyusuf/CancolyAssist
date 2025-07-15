@@ -11,6 +11,13 @@ namespace Cancoly.Application.Features
 {
     public class UploadFileService
     {
+        private readonly IHttpContextAccessor _contextAccessor;
+
+        public UploadFileService(IHttpContextAccessor contextAccessor)
+        {
+            _contextAccessor = contextAccessor;
+        }
+
         public async Task<List<string>> UploadFile(List<IFormFile> scans)
         {
             var res = new List<string>();
@@ -35,6 +42,37 @@ namespace Cancoly.Application.Features
                 }
 
                 res.Add(dbPath);
+            }
+
+            return res;
+        }
+
+        public async Task<List<string>> GetFileUrl(List<IFormFile> files)
+        {
+            var res = new List<string>();
+
+            foreach (var file in files)
+            {
+                var date = DateTime.Now.Date;
+                var folderName = Path.Combine("wwwroot", "storage", $"{date.Day}-{date.Month}-{date.Year}");
+                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+
+                if (!Directory.Exists(pathToSave))
+                {
+                    Directory.CreateDirectory(pathToSave);
+                }
+                var fileName = $"{Guid.NewGuid().ToString("N")}_." + file.ContentType.Substring(6);
+                var fullPath = Path.Combine(pathToSave, fileName);
+                var dbPath = Path.Combine(folderName, fileName);
+
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+
+                var url = $"{_contextAccessor.HttpContext.Request.Scheme}://{_contextAccessor.HttpContext.Request.Host}/storage/{date.Day}-{date.Month}-{date.Year}/{fileName}";
+
+                res.Add(url);
             }
 
             return res;

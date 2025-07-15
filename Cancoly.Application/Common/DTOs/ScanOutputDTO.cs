@@ -15,6 +15,8 @@ namespace Cancoly.Application.Common.DTOs
        
         public string status { get; set; }
 
+        public double confidence { get; set; }
+
         public string tumor_type { get; set; }
 
         public string tumor_size { get; set; }

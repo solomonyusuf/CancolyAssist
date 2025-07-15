@@ -59,7 +59,9 @@ namespace Cancoly.Pages.Components.Users
                                             .Where(x => x.BrainScanId == Scan.Id)
                                             .ToListAsync();
                 current = uploads[0] ?? null;
-
+                complete = uploads.Where(x => x.Pending == false).Count();
+                pending = uploads.Where(x => x.Pending == true).Count();
+            
 
             }
             catch (Exception ex)
@@ -72,101 +74,462 @@ namespace Cancoly.Pages.Components.Users
         {
             try
             {
-                var id = Request.Form["id"];
-                Scan = await _unitOfWork.BrainScanRepository.Get(Guid.Parse(id));
-                Appuser = await _userManager.FindByNameAsync(User.Identity.Name);
-                string Construct = null;
-
-                var converter = new BasicConverter(new PdfTools());
-                var doc = new HtmlToPdfDocument();
-
-                byte[] pdf;
-
-                await Task.Run(async () =>
+                if (Request.Form["type"] == "delete")
                 {
-                    for (int i = 0; i < Scan.FilePaths.Split(',').Length; i++)
+                    await Task.Run(async () =>
                     {
+                        var model = await _unitOfWork.BrainScanRepository.Get(Guid.Parse(Request.Form["id"]));
 
-                        Construct += $@"
-                        <div class=""row p-3 mb-2 border align-items-center"">
-                                <div class=""col-md-3 mb-2"">
-                                    <img src = ""{Request.Scheme}://{Request.Host}/{Scan.FilePaths.Split(',')[i]}"" style=""height:300px;"" class=""img-fluid"">
-                                </div>
-                                <div class=""col-md-9"">
-                                    <span>
-                                        {Scan.Score.Split(",")[i]} % of {Scan.Label.Split(',')[i].Replace("_", " ")}
-                                        {AnalyzeSeverity(double.Parse(Scan.Score.Split(',')[i]), Scan.Label.Split(",")[i].Replace("_", " "))}
-                                    </span>
-                                </div>
-                            </div>
+                        _unitOfWork.BrainScanRepository.Delete(model);
+                        await _unitOfWork.Save();
+
+                        foreach (var item in model.FilePaths.Split(','))
+                        {
+                            System.IO.File.Delete(item);
+                        }
+
+                        TempData["AlertSubject"] = "Deletion Successful";
+                        TempData["AlertMessage"] = "Scan Removed Successfully!";
+                        TempData["AlertType"] = "success";
+
+                        return Redirect($"/user-scan-report?id={model.Id}");
+                    });
+                }
+                else if(Request.Form["type"] == "update")
+                {
+
+                    var model = await _unitOfWork.ScanUploadRepository.Get(Guid.Parse(Request.Form["id"]));
+                    model.Report = Request.Form["message"];
+
+                    _unitOfWork.ScanUploadRepository.Update(model);
+                    await _unitOfWork.Save();
+
+                    TempData["AlertSubject"] = "Update Successful";
+                    TempData["AlertMessage"] = "Scan Updated Successfully!";
+                    TempData["AlertType"] = "success";
+
+                    return Redirect($"/user-scan-report?id={model.BrainScanId}");
+                }
+                else
+                {
+                    var id = Request.Form["id"];
+                    Scan = await _unitOfWork.BrainScanRepository.Get(Guid.Parse(id));
+                    var uploads = await _unitOfWork.ScanUploadRepository.Query()
+                                                    .Where(x=> x.BrainScanId == Scan.Id)
+                                                    .ToListAsync();
+
+                    Appuser = await _userManager.FindByNameAsync(User.Identity.Name);
+                    string Construct = null;
+
+                    var converter = new BasicConverter(new PdfTools());
+                    var doc = new HtmlToPdfDocument();
+
+                    byte[] pdf;
+
+                    await Task.Run(async () =>
+                    {
+                        foreach(var item in uploads)
+                        {
+
+                            Construct += $@"
+                                        <div class=""scan-item"">
+                                            <div class=""scan-image"">
+                                                <img src=""{item.ImageUrl}"" alt=""Brain MRI Scan"">
+                                            </div>
+                                            <div class=""scan-details"">
+                                                <div class=""diagnosis-score"">{item.Confidence} Confidence</div>
+                                                <div class=""diagnosis-label"">{item.Label}</div>
+                                                <div class=""diagnosis-label"">{item.Location}</div>
+                                                <div class=""severity-indicator severity-high"">{item.Stage}</div>
+                                                <div class=""confidence-bar"">
+                                                    <div class=""confidence-fill"" style=""width: {item.Confidence}""></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    <div class=""summary"">
+                                        <h3>Clinical Summary</h3>
+                                        <p>{item.Report}</p>
+                                    </div>
                             ";
 
-                    }
+                        }
 
-                    var logo = $"{Request.Scheme}://{Request.Host}/logo.png";
-                    var body = $@"<!DOCTYPE html>
+                        var logo = $"{Request.Scheme}://{Request.Host}/logo.png";
+                        var body = $@"
+
+                            <!DOCTYPE html>
                             <html lang=""en"">
                             <head>
                                 <meta charset=""UTF-8"">
                                 <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
-                                <title>Scan Report</title>
-                                <link href=""https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"" rel=""stylesheet"">
+                                <title>Brain Tumor Diagnosis Report</title>
+                                <style>
+                                    * {{
+                                        margin: 0;
+                                        padding: 0;
+                                        box-sizing: border-box;
+                                    }}
+
+                                    body {{
+                                        font-family: 'Arial', sans-serif;
+                                        line-height: 1.6;
+                                        color: #333;
+                                        background: #fff;
+                                        font-size: 12px;
+                                    }}
+
+                                    .container {{
+                                        max-width: 210mm;
+                                        margin: 0 auto;
+                                        padding: 20px;
+                                        background: white;
+                                    }}
+
+                                    /* Header Section */
+                                    .header {{
+                                        display: flex;
+                                        justify-content: space-between;
+                                        align-items: center;
+                                        border-bottom: 3px solid #2c5aa0;
+                                        padding-bottom: 15px;
+                                        margin-bottom: 25px;
+                                    }}
+
+                                    .logo-section {{
+                                        display: flex;
+                                        align-items: center;
+                                        gap: 15px;
+                                    }}
+
+                                    .logo-placeholder {{
+                                         width: 60px;
+                                        height: 60px;
+                                        background-image: url('{Appuser.CompanyLogo}');
+                                        background-size: cover;
+                                        background-position: center;
+                                        border: 2px dashed #ccc;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        font-size: 10px;
+                                        color: #666;
+                                    }}
+
+                                    .hospital-info h1 {{
+                                        font-size: 18px;
+                                        color: #2c5aa0;
+                                        font-weight: bold;
+                                        margin-bottom: 2px;
+                                    }}
+
+                                    .hospital-info p {{
+                                        font-size: 10px;
+                                        color: #666;
+                                        margin: 1px 0;
+                                    }}
+
+                                    .report-meta {{
+                                        text-align: right;
+                                        font-size: 10px;
+                                        color: #666;
+                                    }}
+
+                                    .report-meta strong {{
+                                        color: #333;
+                                    }}
+
+                                    /* Report Title */
+                                    .report-title {{
+                                        background: linear-gradient(135deg, #2c5aa0, #3d6bb3);
+                                        color: white;
+                                        padding: 15px 20px;
+                                        margin-bottom: 25px;
+                                        border-radius: 5px;
+                                    }}
+
+                                    .report-title h2 {{
+                                        font-size: 16px;
+                                        font-weight: bold;
+                                        margin-bottom: 5px;
+                                    }}
+
+                                    .report-title p {{
+                                        font-size: 11px;
+                                        opacity: 0.9;
+                                    }}
+
+                                    /* Patient Information */
+                                    .patient-info {{
+                                        background: #f8f9fa;
+                                        border: 1px solid #dee2e6;
+                                        border-radius: 5px;
+                                        padding: 15px;
+                                        margin-bottom: 25px;
+                                    }}
+
+                                    .patient-info h3 {{
+                                        color: #2c5aa0;
+                                        font-size: 14px;
+                                        margin-bottom: 10px;
+                                        border-bottom: 1px solid #dee2e6;
+                                        padding-bottom: 5px;
+                                    }}
+
+                                    .patient-details {{
+                                        display: grid;
+                                        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                                        gap: 10px;
+                                    }}
+
+                                    .patient-details div {{
+                                        display: flex;
+                                        align-items: center;
+                                    }}
+
+                                    .patient-details strong {{
+                                        min-width: 80px;
+                                        color: #495057;
+                                        font-size: 11px;
+                                    }}
+
+                                    .patient-details span {{
+                                        color: #333;
+                                        font-size: 11px;
+                                    }}
+
+                                    /* Scan Results */
+                                    .scan-results {{
+                                        margin-bottom: 25px;
+                                    }}
+
+                                    .scan-results h3 {{
+                                        color: #2c5aa0;
+                                        font-size: 14px;
+                                        margin-bottom: 15px;
+                                        border-bottom: 2px solid #2c5aa0;
+                                        padding-bottom: 5px;
+                                    }}
+
+                                    .scan-item {{
+                                        display: flex;
+                                        align-items: center;
+                                        background: #fff;
+                                        border: 1px solid #dee2e6;
+                                        border-radius: 5px;
+                                        padding: 15px;
+                                        margin-bottom: 15px;
+                                        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                                    }}
+
+                                    .scan-image {{
+                                        flex: 0 0 120px;
+                                        margin-right: 20px;
+                                    }}
+
+                                    .scan-image img {{
+                                        width: 100%;
+                                        height: 120px;
+                                        object-fit: cover;
+                                        border-radius: 5px;
+                                        border: 1px solid #dee2e6;
+                                    }}
+
+                                    .scan-details {{
+                                        flex: 1;
+                                    }}
+
+                                    .diagnosis-score {{
+                                        font-size: 16px;
+                                        font-weight: bold;
+                                        margin-bottom: 8px;
+                                    }}
+
+                                    .diagnosis-label {{
+                                        font-size: 12px;
+                                        color: #495057;
+                                        margin-bottom: 8px;
+                                    }}
+
+                                    .severity-indicator {{
+                                        display: inline-block;
+                                        padding: 4px 8px;
+                                        border-radius: 3px;
+                                        font-size: 10px;
+                                        font-weight: bold;
+                                        text-transform: uppercase;
+                                    }}
+
+                                    .severity-low {{
+                                        background: #d4edda;
+                                        color: #155724;
+                                        border: 1px solid #c3e6cb;
+                                    }}
+
+                                    .severity-moderate {{
+                                        background: #fff3cd;
+                                        color: #856404;
+                                        border: 1px solid #ffeaa7;
+                                    }}
+
+                                    .severity-high {{
+                                        background: #f8d7da;
+                                        color: #721c24;
+                                        border: 1px solid #f5c6cb;
+                                    }}
+
+                                    .severity-critical {{
+                                        background: #d1ecf1;
+                                        color: #0c5460;
+                                        border: 1px solid #bee5eb;
+                                    }}
+
+                                    /* Progress Bar */
+                                    .confidence-bar {{
+                                        width: 100%;
+                                        height: 8px;
+                                        background: #e9ecef;
+                                        border-radius: 4px;
+                                        overflow: hidden;
+                                        margin-top: 8px;
+                                    }}
+
+                                    .confidence-fill {{
+                                        height: 100%;
+                                        background: linear-gradient(90deg, #28a745, #ffc107, #dc3545);
+                                        transition: width 0.3s ease;
+                                    }}
+
+                                    /* Summary Section */
+                                    .summary {{
+                                        background: #f8f9fa;
+                                        border-left: 4px solid #2c5aa0;
+                                        padding: 15px;
+                                        margin-bottom: 25px;
+                                    }}
+
+                                    .summary h3 {{
+                                        color: #2c5aa0;
+                                        font-size: 14px;
+                                        margin-bottom: 10px;
+                                    }}
+
+                                    .summary p {{
+                                        font-size: 11px;
+                                        color: #495057;
+                                        margin-bottom: 8px;
+                                    }}
+
+                                    /* Footer */
+                                    .footer {{
+                                        border-top: 1px solid #dee2e6;
+                                        padding-top: 15px;
+                                        margin-top: 30px;
+                                        font-size: 10px;
+                                        color: #6c757d;
+                                    }}
+
+                                    .footer-content {{
+                                        display: flex;
+                                        justify-content: space-between;
+                                        align-items: center;
+                                    }}
+
+                                    .disclaimer {{
+                                        max-width: 60%;
+                                        font-style: italic;
+                                    }}
+
+                                    .generated-info {{
+                                        text-align: right;
+                                    }}
+
+                                    /* Print Styles */
+                                    @media print {{
+                                        body {{
+                                            font-size: 11px;
+                                        }}
+            
+                                        .container {{
+                                            padding: 10px;
+                                        }}
+            
+                                        .scan-item {{
+                                            page-break-inside: avoid;
+                                        }}
+                                    }}
+                                </style>
                             </head>
                             <body>
-                                <div class=""container-xxl flex-grow-1 container-p-y"">
-                                    <div class=""d-flex align-items-center justify-content-between"">
-                                        <div class=""logo-placeholder mb-3"">
-                                            <!-- Space for Logo -->
-                                            <img src=""{logo}"" alt=""Logo"" style=""height:50px;"">
+                                <div class=""container"">
+                                    <!-- Header -->
+                                    <div class=""header"">
+                                        <div class=""logo-section"">
+                                            <div class=""logo-placeholder"">LOGO</div>
+                                            <div class=""hospital-info"">
+                                                <h1>{Appuser.CompanyName}</h1>
+                                                <p>Radiology Unit</p>
+                                                <p>Phone:{Appuser.PhoneNumber} | Email: {Appuser.Email}</p>
+                                            </div>
                                         </div>
-            
+                                        <div class=""report-meta"">
+                                            <p><strong>Report ID:</strong>{string.Join("", Scan.Id.ToString().Take(8))}</p>
+                                            <p><strong>Generated:</strong> {DateTime.Now.ToLongDateString()}</p>
+                                            <p><strong>Status:</strong> Final</p>
+                                        </div>
                                     </div>
 
-                                    <h4 class=""fw-bold py-3 mb-4"">
-                                        Scan Report #{(string.Join("", id.Take(8)))}
-                                    </h4>
+                                    <!-- Report Title -->
+                                    <div class=""report-title"">
+                                        <h2>Brain Tumor Analysis Report</h2>
+                                        <p>AI-Assisted Diagnostic Imaging Analysis</p>
+                                    </div>
 
-                                    <div class=""row"">
-                                        <div class=""col-12"">
-                                            <div class=""card mb-4"">
-                                                <h3 class=""card-header text-uppercase"">
-                                                    {Scan.Title}
-                                                </h3>
+                                    <!-- Patient Information -->
+                                    <div class=""patient-info"">
+                                        <h3>Patient Information</h3>
+                                        <div class=""patient-details"">
+                                            <div><strong>Name:</strong> <span>{Scan.Title}</span></div>
+                                            <div><strong>Generated:</strong> <span>{DateTime.Now}</span></div>
+                                            <div><strong>Phone No:</strong> <span>{Appuser.PhoneNumber}</span></div>
+                                             <div><strong>Scan Date:</strong> <span>{Scan.DateCreated}</span></div>
+                                         </div>
+                                    </div>
 
-                                                <div class=""card-body"">
-                                                    <div class=""row p-3 border mb-2"">
-                                                        <div class=""col-md-6 mb-2"">
-                                                            <p><strong>First Name: </strong>{Appuser.FirstName}</p>
-                                                        </div>
-                                                        <div class=""col-md-6 mb-2"">
-                                                            <p><strong>Last Name: </strong>{Appuser.LastName}</p>
-                                                        </div>
-                                                        <div class=""col-md-6 mb-2"">
-                                                            <p><strong>Scan Email: </strong>{Appuser.Email}</p>
-                                                        </div>
-                                                    </div>
+                                    <!-- Scan Results -->
+                                    <div class=""scan-results"">
+                                        <h3>Diagnostic Results</h3>
+            
+                                        <!-- Sample Scan Result 1 -->
+                                       {Construct}
 
-                                                    {Construct}
-                                                </div>
+
+                                    <!-- Footer -->
+                                    <div class=""footer"">
+                                        <div class=""footer-content"">
+                                            <div class=""disclaimer"">
+                                                <strong>Disclaimer:</strong> This AI-assisted analysis is for clinical decision support only. 
+                                                Final diagnosis must be confirmed by qualified medical professionals through comprehensive evaluation.
+                                            </div>
+                                            <div class=""generated-info"">
+                                                <p>Generated by: CancolyAI v1.0</p>
+                                                <p>Radiologist: {Appuser.FirstName + " "+ Appuser.LastName}</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
-                                <script src=""https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js""></script>
                             </body>
-                            </html>
-                            ";
+                            </html>";
 
-                    doc = new HtmlToPdfDocument()
-                    {
-                        GlobalSettings = {
+                        doc = new HtmlToPdfDocument()
+                        {
+                            GlobalSettings = {
                         ColorMode = DinkToPdf.ColorMode.Color,
                         Orientation = Orientation.Portrait,
                         PaperSize = DinkToPdf.PaperKind.A4,
 
                     },
-                        Objects = {
+                            Objects = {
                         new ObjectSettings()
                         {
                            PagesCount = true,
@@ -175,19 +538,22 @@ namespace Cancoly.Pages.Components.Users
 
                         },
                     }
-                    };
+                        };
 
-                });
-              
-                pdf = converter.Convert(doc);
-                var stream = new MemoryStream();
-                stream.Write(pdf);
+                    });
 
-                var contentType = @"application/pdf";
-                var fileName = $"ScanReport_{DateTime.Now}.pdf";
-                stream.Seek(0, SeekOrigin.Begin);
+                    pdf = converter.Convert(doc);
+                    var stream = new MemoryStream();
+                    stream.Write(pdf);
 
-                return File(stream, contentType, fileName);
+                    var contentType = @"application/pdf";
+                    var fileName = $"ScanReport_{DateTime.Now}.pdf";
+                    stream.Seek(0, SeekOrigin.Begin);
+
+                    return File(stream, contentType, fileName);
+                }
+
+               
 
             }
             catch(Exception ex)
@@ -195,7 +561,7 @@ namespace Cancoly.Pages.Components.Users
                 Console.WriteLine(ex);
             }
 
-            return Redirect($"/user-scan-report?id={Request.Form["id"]}");
+            return Page();
         }
 
         public string AnalyzeSeverity(double percentage, string tumor)

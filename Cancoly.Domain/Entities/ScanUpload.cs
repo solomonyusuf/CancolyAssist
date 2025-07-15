@@ -28,6 +28,8 @@ namespace Cancoly.Domain.Entities
 
         public string? Location { get; set; }
 
+        public double Confidence { get; set; } = 0;
+
         public bool? Pending { get; set; }
 
         [MaxLength(1000000)]

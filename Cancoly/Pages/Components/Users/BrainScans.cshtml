@@ -14,7 +14,28 @@
 
 }
 <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="mb-3 text-center">Brain Scans</h4>
+    <div class="card bg-plane shadow-none position-relative overflow-hidden mb-4">
+        <div class="card-body px-4 py-3">
+            <div class="row align-items-center">
+                <div class="col-9">
+                    <h4 class="fw-semibold mb-8 text-white">Scans</h4>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a class="text-muted text-decoration-none" href="/dashboard">Dashboard</a>
+                            </li>
+                            <li class="breadcrumb-item text-white" aria-current="page">Scans</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-3">
+                    <div class="text-center mb-n5">
+                        <img src="assets/img/brain.png" class="img-fluid mb-n4">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <button type="button" class="btn btn-outline-primary mb-4" data-bs-toggle="modal" data-bs-target="#exLargeModal">
         New Scan
     </button>
@@ -30,11 +51,11 @@
                         <div class="col-sm-6 mb-3">
                             <input name="type" value="create" hidden />
 
-                            <label for="nameExLarge" class="form-label">Title</label>
+                            <label for="nameExLarge" class="form-label">Patient Name</label>
                             <input name="title" required type="text" id="nameExLarge" class="form-control" placeholder="Enter Name">
                         </div>
                         <div class="col-sm-6  mb-3">
-                            <label for="emailExLarge" class="form-label">Email</label>
+                            <label for="emailExLarge" class="form-label">Patient Email</label>
                             <input name="email" required type="text" id="emailExLarge" class="form-control" placeholder="xxxx@xxx.xx">
                         </div>
                     </div>
@@ -73,41 +94,23 @@
         {
             @foreach (var data in Model.brainScans)
             {
-                <div class="col-md-3 col-lg-3 mb-3">
-                    <div class="card h-100">
-                        <img class="card-img-top" style="height:220px;" src="@(data.FilePaths.Split(',')[0])" alt="">
+                <div class="col-md-4 d-flex align-items-stretch">
+                    <a href="/user-scan-report?id=@data.Id" class="card bg-primary text-white w-100 card-hover">
                         <div class="card-body">
-                            <h5 class="card-title text-uppercase">@data.Title</h5>
-                            <p class="card-text">
-                            </p>
-                            <div class="row">
-                                <a style="margin:3px;" href="/user-scan-report?id=@data.Id" class="btn btn-outline-primary col mb-2">Report</a>
-                                <button style="margin:3px;" type="button" class="btn btn-outline-danger col mb-2" data-bs-toggle="modal" data-bs-target="#basicModal@(++count)">
-                                    Delete
-                                </button>
-                                <div class="modal fade" id="basicModal@(count)" tabindex="-1" style="display: none;" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <form method="post" class="modal-content">
-                                            <div class="modal-body">
-                                                <div class="row">
-                                                    <input name="type" value="delete" hidden />
-                                                    <input name="id" value="@data.Id" hidden />
-                                                    <h5 class="text-center">Are you sure you want to delete?</h5>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                                                    Close
-                                                </button>
-                                                <button type="submit" class="btn btn-danger">Save changes</button>
-                                            </div>
-                                        </form>
-                                    </div>
+                            <div class="d-flex align-items-center">
+                                <i class="ti ti-perspective display-6"></i>
+                                <div class="ms-auto">
+                                    <i class="ti ti-arrow-right fs-8"></i>
                                 </div>
+                            </div>
+                            <div class="mt-4">
+                                <h4 class="card-title mb-1 text-white">
+                                    @data.Title
+                                </h4>
 
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             }
 
