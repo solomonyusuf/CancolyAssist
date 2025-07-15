@@ -2,7 +2,6 @@
 using Cancoly.Application.Common.Workers;
 using Cancoly.Application.Features;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.ML;
 
 namespace Cancoly.Application
 {

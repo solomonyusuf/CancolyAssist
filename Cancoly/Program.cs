@@ -1,9 +1,6 @@
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.ML;
-using Microsoft.OpenApi.Models;
-using Microsoft.ML.Data;
 using Cancoly;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.FileProviders;
@@ -22,13 +19,12 @@ using DinkToPdf;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Http.Features;
 using Cancoly.Persistence;
-using Microsoft.ML;
 using Microsoft.AspNetCore.StaticFiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-bool production = false;
+bool production = true;
 bool seeder = true;
 
 var env = (production ? "ProductionConnection" : "DefaultConnection");

@@ -56,9 +56,9 @@ namespace Cancoly.Pages.Components.Users
                         var image = Request.Form.Files["image"];
                         var image2 = Request.Form.Files["logo"];
 
-                        if (image != null || image2 != null)
+                        if (image != null)
                         {
-                            if (image.Length > 4145728 || image2.Length > 4145728)
+                            if (image.Length > 4145728)
                             {
                                 TempData["AlertSubject"] = $"Image Size Exceeded";
                                 TempData["AlertMessage"] = "The accepted image size is a max of 3mb, allowed files are jpg, png, jpeg ";
@@ -67,13 +67,30 @@ namespace Cancoly.Pages.Components.Users
                                 return Redirect("/account-profile");
                             }
                             AppUser.Image = _uploadService.GetFileUrl(new List<IFormFile> { image }).Result[0];
-                            AppUser.CompanyLogo = _uploadService.GetFileUrl(new List<IFormFile> { image }).Result[0];
+                        }
+
+                        if (image2 != null)
+                        {
+                            if (image2.Length > 4145728)
+                            {
+                                TempData["AlertSubject"] = $"Image Size Exceeded";
+                                TempData["AlertMessage"] = "The accepted image size is a max of 3mb, allowed files are jpg, png, jpeg ";
+                                TempData["AlertType"] = "warning";
+
+                                return Redirect("/account-profile");
+                            }
+                             AppUser.CompanyLogo = _uploadService.GetFileUrl(new List<IFormFile> { image2 }).Result[0];
                         }
 
                     }
                     if (AppUser.Image == null)
                     {
                         AppUser.Image = "assets/img/user-icon.png";
+                    }
+                    
+                    if (AppUser.CompanyLogo == null)
+                    {
+                        AppUser.Image = "icon.png";
                     }
 
                     AppUser.FirstName = Request.Form["first_name"];

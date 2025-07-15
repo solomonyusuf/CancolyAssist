@@ -97,6 +97,8 @@ namespace Cancoly.Areas.Identity.Pages.Account
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
                 user.Image = "assets/img/user-icon.png";
+                user.CompanyLogo = "";
+                user.CompanyName = "";
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 

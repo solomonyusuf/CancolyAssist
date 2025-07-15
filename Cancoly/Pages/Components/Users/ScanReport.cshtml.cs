@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using PayStack.Net;
 using System.Security.Policy;
-using static Tensorflow.TensorShapeProto.Types;
 
 namespace Cancoly.Pages.Components.Users
 {
@@ -134,15 +133,15 @@ namespace Cancoly.Pages.Components.Users
                             Construct += $@"
                                         <div class=""scan-item"">
                                             <div class=""scan-image"">
-                                                <img src=""{item.ImageUrl}"" alt=""Brain MRI Scan"">
+                                                <img src=""{item.ImageUrl}"" style=""height:400px;"" alt=""Brain MRI Scan"">
                                             </div>
                                             <div class=""scan-details"">
-                                                <div class=""diagnosis-score"">{item.Confidence} Confidence</div>
+                                                <div class=""diagnosis-score"">{item.Confidence}% Confidence</div>
                                                 <div class=""diagnosis-label"">{item.Label}</div>
-                                                <div class=""diagnosis-label"">{item.Location}</div>
+                                                <div class=""diagnosis-label"">Located at {item.Location}</div>
                                                 <div class=""severity-indicator severity-high"">{item.Stage}</div>
                                                 <div class=""confidence-bar"">
-                                                    <div class=""confidence-fill"" style=""width: {item.Confidence}""></div>
+                                                    <div class=""confidence-fill"" style=""width: {item.Confidence}%;""></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -205,7 +204,7 @@ namespace Cancoly.Pages.Components.Users
                                     .logo-placeholder {{
                                          width: 60px;
                                         height: 60px;
-                                        background-image: url('{Appuser.CompanyLogo}');
+                                        background-image: url('{Appuser.CompanyLogo}') no-repeat;
                                         background-size: cover;
                                         background-position: center;
                                         border: 2px dashed #ccc;
@@ -465,7 +464,7 @@ namespace Cancoly.Pages.Components.Users
                                     <!-- Header -->
                                     <div class=""header"">
                                         <div class=""logo-section"">
-                                            <div class=""logo-placeholder"">LOGO</div>
+                                            <div class=""logo-placeholder""></div>
                                             <div class=""hospital-info"">
                                                 <h1>{Appuser.CompanyName}</h1>
                                                 <p>Radiology Unit</p>
