@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using PayStack.Net;
 using System.Security.Policy;
@@ -124,16 +125,30 @@ namespace Cancoly.Pages.Components.Users
                     var doc = new HtmlToPdfDocument();
 
                     byte[] pdf;
-
+                    var provider = new FileExtensionContentTypeProvider();
                     await Task.Run(async () =>
                     {
                         foreach(var item in uploads)
                         {
+                            var imagePath = Path.Combine(Directory.GetCurrentDirectory(),  item.FilePath); 
+
+                            if (!System.IO.File.Exists(imagePath))
+                                continue;
+
+                            // Get MIME type based on file extension
+                            string contentType;
+                            if (!provider.TryGetContentType(imagePath, out contentType))
+                            {
+                                contentType = "application/octet-stream"; // fallback
+                            }
+
+                            var base64Image = Convert.ToBase64String(System.IO.File.ReadAllBytes(imagePath));
+                            var imageSrc = $"data:{contentType};base64,{base64Image}";
 
                             Construct += $@"
                                         <div class=""scan-item"">
                                             <div class=""scan-image"">
-                                                <img src=""{item.ImageUrl}"" style=""height:400px;"" alt=""Brain MRI Scan"">
+                                                <img src=""{imageSrc}"" style=""height:400px;"" alt=""Brain MRI Scan"">
                                             </div>
                                             <div class=""scan-details"">
                                                 <div class=""diagnosis-score"">{item.Confidence}% Confidence</div>
@@ -154,7 +169,24 @@ namespace Cancoly.Pages.Components.Users
 
                         }
 
-                        var logo = $"{Request.Scheme}://{Request.Host}/logo.png";
+                        string logoUrl = Appuser.CompanyLogo ?? $"{Request.Scheme}://{Request.Host}/logo.png";
+
+                        // Download image bytes from the URL
+                        using var httpClient = new HttpClient();
+                        var imageBytes = await httpClient.GetByteArrayAsync(logoUrl);
+
+                        // Get MIME type from extension
+                        string contentType1;
+                        var logoExtension = Path.GetExtension(logoUrl);
+                        if (!provider.TryGetContentType(logoExtension, out contentType1))
+                        {
+                            contentType1 = "application/octet-stream";
+                        }
+
+                        // Convert to base64
+                        var base64Logo = Convert.ToBase64String(imageBytes);
+                        var base64LogoSrc = $"data:{contentType1};base64,{base64Logo}";
+
                         var body = $@"
 
                             <!DOCTYPE html>
@@ -204,7 +236,6 @@ namespace Cancoly.Pages.Components.Users
                                     .logo-placeholder {{
                                          width: 60px;
                                         height: 60px;
-                                        background-image: url('{Appuser.CompanyLogo}') no-repeat;
                                         background-size: cover;
                                         background-position: center;
                                         border: 2px dashed #ccc;
@@ -464,7 +495,9 @@ namespace Cancoly.Pages.Components.Users
                                     <!-- Header -->
                                     <div class=""header"">
                                         <div class=""logo-section"">
-                                            <div class=""logo-placeholder""></div>
+                                            <div 
+                                                    style=""background-image: url('{base64LogoSrc}'); background-repeat: no-repeat; height: 100px;""
+                                                    class=""logo-placeholder"" ></div>
                                             <div class=""hospital-info"">
                                                 <h1>{Appuser.CompanyName}</h1>
                                                 <p>Radiology Unit</p>
@@ -522,21 +555,31 @@ namespace Cancoly.Pages.Components.Users
 
                         doc = new HtmlToPdfDocument()
                         {
-                            GlobalSettings = {
-                        ColorMode = DinkToPdf.ColorMode.Color,
-                        Orientation = Orientation.Portrait,
-                        PaperSize = DinkToPdf.PaperKind.A4,
-
-                    },
-                            Objects = {
-                        new ObjectSettings()
-                        {
-                           PagesCount = true,
-                           HtmlContent = body,
-                           FooterSettings = { FontSize = 10, FontName= "Arial", Center = "Powered by Cancoly Tech", Line = true },
-
-                        },
-                    }
+                            GlobalSettings = 
+                            {
+                                    ColorMode = DinkToPdf.ColorMode.Color,
+                                    Orientation = Orientation.Portrait,
+                                    PaperSize = DinkToPdf.PaperKind.A4,
+                            },
+                            
+                            Objects =
+                            {
+                                    new ObjectSettings()
+                                    {
+                                       PagesCount = true,
+                                       HtmlContent = body,
+                                       FooterSettings = { FontSize = 10, FontName= "Arial", Center = "Powered by Cancoly Tech", Line = true },
+                                       WebSettings = {
+                                            DefaultEncoding = "utf-8",
+                                            LoadImages = true,
+                                        },
+                                       LoadSettings = new LoadSettings
+                                        {
+                                            BlockLocalFileAccess = false,
+                                        }
+                                    },
+                            },
+                            
                         };
 
                     });
