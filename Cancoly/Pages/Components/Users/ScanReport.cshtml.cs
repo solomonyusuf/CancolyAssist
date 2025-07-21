@@ -76,24 +76,33 @@ namespace Cancoly.Pages.Components.Users
             {
                 if (Request.Form["type"] == "delete")
                 {
-                    await Task.Run(async () =>
-                    {
-                        var model = await _unitOfWork.BrainScanRepository.Get(Guid.Parse(Request.Form["id"]));
-
-                        _unitOfWork.BrainScanRepository.Delete(model);
-                        await _unitOfWork.Save();
-
-                        foreach (var item in model.FilePaths.Split(','))
+                    try 
+                    { 
+                        await Task.Run(async () =>
                         {
-                            System.IO.File.Delete(item);
-                        }
+                            var model = await _unitOfWork.BrainScanRepository.Get(Guid.Parse(Request.Form["id"]));
 
-                        TempData["AlertSubject"] = "Deletion Successful";
-                        TempData["AlertMessage"] = "Scan Removed Successfully!";
-                        TempData["AlertType"] = "success";
+                            _unitOfWork.BrainScanRepository.Delete(model);
+                            await _unitOfWork.Save();
 
-                        return Redirect($"/user-scan-report?id={model.Id}");
-                    });
+                            foreach (var item in model.FilePaths.Split(','))
+                            {
+                                System.IO.File.Delete(item);
+                            }
+
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                    }
+
+                    TempData["AlertSubject"] = "Deletion Successful";
+                    TempData["AlertMessage"] = "Scan Removed Successfully!";
+                    TempData["AlertType"] = "success";
+
+                    return Redirect("/user-brain-scans");
+
                 }
                 else if(Request.Form["type"] == "update")
                 {
@@ -603,7 +612,7 @@ namespace Cancoly.Pages.Components.Users
                 Console.WriteLine(ex);
             }
 
-            return Page();
+            return Redirect("/user-brain-scans");
         }
 
         public string AnalyzeSeverity(double percentage, string tumor)

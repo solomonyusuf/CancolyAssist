@@ -23,18 +23,21 @@ namespace Cancoly.Pages.Components.Users
         private UploadFileService _fileService;
         private UserManager<ApplicationUser> _userManager;
         private HttpClient _httpClient;
+        private DICOMService _dicomService;
  
         public BrainScansModel(
             UploadFileService fileService,
              IUnitOfWork unitOfWork,
              UserManager<ApplicationUser> userManager,
-             HttpClient httpClient
+             HttpClient httpClient,
+             DICOMService dicomService
             )
         {
             _fileService = fileService;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
             _httpClient = httpClient;
+            _dicomService = dicomService;
         }
 
         public Guid Id { get; set; }
@@ -45,6 +48,7 @@ namespace Cancoly.Pages.Components.Users
         {
             try
             {
+               
                 var user = await _userManager.FindByEmailAsync(User.Identity.Name);
 
                 brainScans = await _unitOfWork.BrainScanRepository.Query()
@@ -87,7 +91,12 @@ namespace Cancoly.Pages.Components.Users
                         TempData["AlertSubject"] = "Deletion Successful";
                         TempData["AlertMessage"] = "Scan Removed Successfully!";
                         TempData["AlertType"] = "success";
-                    });    
+
+                        return Redirect("/user-brain-scans");
+                    });
+
+
+                   
                 }
                 else
                 {
@@ -114,12 +123,29 @@ namespace Cancoly.Pages.Components.Users
 
                     //    return Redirect("/user-brain-scans");
                     //}
+
+
                    
                     await Task.Run(async () =>
                     {
                         var user = await _userManager.FindByEmailAsync(User.Identity.Name);
 
-                        var files = await _fileService.UploadFile(Request.Form.Files.ToList());
+                        var type = Request.Form["file_type"];
+
+                        var files = new List<string>();
+
+                        if (type == "dcm")
+                        {
+                            var images = _dicomService.ConvertDicomToBase64(Request.Form.Files);
+
+                            files = await _fileService.SaveBase64AsImage(images);
+
+                        }
+                        else
+                        {
+                            files = await _fileService.UploadFile(Request.Form.Files.ToList());
+                        }
+
 
                         var scan = new BrainScan();
 

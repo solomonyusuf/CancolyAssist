@@ -78,47 +78,44 @@ namespace Cancoly.Application.Features
             return res;
         }
 
-        public string SaveBase64AsImage(string base64String, string fileType)
+        public async Task<List<string>> SaveBase64AsImage(List<string> base64Images)
         {
-            try
+            var savedFilePaths = new List<string>();
+            var date = DateTime.Now.Date;
+            var folderName = Path.Combine("wwwroot", "storage", $"{date.Day}-{date.Month}-{date.Year}");
+
+            var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+
+            // Create the directory if it doesn't exist
+            if (!Directory.Exists(uploadPath))
+                Directory.CreateDirectory(uploadPath);
+
+            int count = 0;
+
+            foreach (var base64 in base64Images)
             {
-                // Extract file type if Base64 includes metadata like 'data:image/png;base64,...'
-                var base64Data = base64String;
-                var date = DateTime.Now.Date;
-
-                if (base64String.Contains(","))
+                try
                 {
-                    var parts = base64String.Split(',');
-                    base64Data = parts[1];
-                    if (parts[0].Contains("image"))
-                    {
-                        var mimeType = parts[0].Split('/')[1].Split(';')[0];
-                        fileType = mimeType;
-                    }
+                    // Clean base64 if it has data URI prefix
+                    var cleanedBase64 = base64.Contains(",") ? base64.Split(',')[1] : base64;
+
+                    var bytes = Convert.FromBase64String(cleanedBase64);
+
+                    var fileName = $"{Guid.NewGuid().ToString()}.png";
+                    var dbPath = Path.Combine(folderName, fileName);
+
+                    await File.WriteAllBytesAsync(dbPath, bytes);
+                    savedFilePaths.Add(dbPath);
+
+                    count++;
                 }
-
-                // Decode Base64 string
-                var imageBytes = Convert.FromBase64String(base64Data);
-
-                // Save to a unique file path
-                var fileName = $"{Guid.NewGuid()}.{fileType}";
-                var fullPath = Path.Combine("wwwroot", "storage", $"{date.Day}-{date.Month}-{date.Year}");
-                
-                if (!Directory.Exists(fullPath))
+                catch (Exception ex)
                 {
-                    Directory.CreateDirectory(fullPath);
+                    Console.WriteLine($"Error saving image: {ex.Message}");
                 }
-                var filePath = Path.Combine(fullPath, fileName);
-
-                File.WriteAllBytes(filePath, imageBytes);
-
-                return filePath; 
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error saving image: {ex.Message}");
-                return null; // Indicate failure
-            }
+
+            return savedFilePaths;
         }
 
 

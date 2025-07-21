@@ -64,7 +64,7 @@ namespace Cancoly.Application.Common.Workers
                         Console.WriteLine(ex);
                     }
 
-                    await Task.Delay(5000, stoppingToken);
+                    await Task.Delay(10000, stoppingToken);
                 }
 
 

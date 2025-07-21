@@ -12,6 +12,7 @@ namespace Cancoly.Application
             services.AddTransient<PaymentService>();
             services.AddTransient<UploadFileService>();
             services.AddTransient<OpenAIService>();
+            services.AddTransient<DICOMService>();
 
             //workers
             services.AddHostedService<MailSenderWorker>();

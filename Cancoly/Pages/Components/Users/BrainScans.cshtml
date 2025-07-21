@@ -60,6 +60,20 @@
                         </div>
                     </div>
                     <div class="row g-2 justify-content-center">
+
+                        <div class="col-sm-6  mb-3">
+                            <label for="emailExLarge" class="form-label">Select File Type <small>(PNG, DCM, jpeg)</small></label>
+                            <select name="file_type" required type="text" class="form-control">
+                                <option value="" >Select one </option>
+                                <option value="dcm">DICOM Image</option>
+                                <option value="image">Normal Image</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6 mb-0">
+                            <label for="emailExLarge" class="form-label">Files Upload <small>(max @max)</small></label>
+                            <input type="file" name="test" id="fileInput" accept=".jpg,.png,.jpeg,.dcm,application/dicom" max="@max" multiple class="form-control">
+                        </div>
+
                         <div class="mb-3 col-sm-12 mb-0">
                             <div class="alert alert-warning">
                                 <h6 class="alert-heading fw-bold mb-1 text-uppercase text-dark">Warning</h6>
@@ -68,11 +82,8 @@
                                 </p>
                             </div>
                         </div>
+
                         
-                        <div class="col-7 mb-0">
-                            <label for="emailExLarge" class="form-label">Files Upload <small>(max @max)</small></label>
-                            <input type="file" name="test" id="fileInput" accept=".jpg,.png,.jpeg,.dcm,application/dicom" max="@max" multiple class="form-control">
-                        </div>
 
                         <div class="row col-12 mt-2" id="fileDisplayArea">
                         </div>
@@ -94,7 +105,7 @@
         {
             @foreach (var data in Model.brainScans)
             {
-                <div class="col-md-4 d-flex align-items-stretch">
+                <div class="col-md-4 d-flex mb-3 align-items-stretch">
                     <a href="/user-scan-report?id=@data.Id" class="card bg-primary text-white w-100 card-hover">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -120,47 +131,111 @@
 </div>
   @section Scripts {
     <script>
-            document.addEventListener('DOMContentLoaded', () => {
+        // document.addEventListener('DOMContentLoaded', () => {
+        //     const fileInput = document.getElementById('fileInput');
+        //     const fileDisplayArea = document.getElementById('fileDisplayArea');
+
+        //     fileInput.addEventListener('change', () => {
+        //     Clear the file display area
+        //     fileDisplayArea.innerHTML = '';
+
+        //     const files = Array.from(fileInput.files);
+
+        //     Limit to 5 files
+        //     if (files.length > @(max)) {
+        //         alert(`You can only upload up to @(max) images.`);
+        //         fileInput.value = ''; Clear the input
+        //         return;
+        //     }
+
+        //     Display images
+        //     files.forEach((file, index) => {
+        //         if (!file.type.startsWith('image/')) {
+        //         alert(`File ${file.name} is not an image. Please upload valid images.`);
+        //         return;
+        //         }
+
+        //         const reader = new FileReader();
+        //         reader.onload = (event) => {
+        //         const col = document.createElement('div');
+        //         col.className = 'col-md-3 mb-3';
+
+        //         const img = document.createElement('img');
+        //         img.src = event.target.result;
+        //         img.alt = `Uploaded Image ${index + 1}`;
+        //         img.className = 'img-thumbnail rounded';
+        //         img.style ='height:157px;width:157px;';
+        //         col.appendChild(img);
+        //         fileDisplayArea.appendChild(col);
+        //         };
+
+        //         reader.readAsDataURL(file);
+        //     });
+        //     });
+        // });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
             const fileInput = document.getElementById('fileInput');
             const fileDisplayArea = document.getElementById('fileDisplayArea');
 
-            fileInput.addEventListener('change', () => {
-            // Clear the file display area
-            fileDisplayArea.innerHTML = '';
 
-            const files = Array.from(fileInput.files);
+            fileInput.addEventListener('change', async () => {
+                fileDisplayArea.innerHTML = '';
+                const files = Array.from(fileInput.files);
 
-            // Limit to 5 files
-            if (files.length > @(max)) {
-                alert(`You can only upload up to @(max) images.`);
-                fileInput.value = ''; // Clear the input
-                return;
-            }
-
-            // Display images
-            files.forEach((file, index) => {
-                if (!file.type.startsWith('image/')) {
-                alert(`File ${file.name} is not an image. Please upload valid images.`);
-                return;
+                if (files.length > @(max)) {
+                    alert(`You can only upload up to @(max) files.`);
+                    fileInput.value = '';
+                    return;
                 }
 
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                const col = document.createElement('div');
-                col.className = 'col-md-3 mb-3';
+                for (const file of files) {
+                    const fileName = file.name.toLowerCase();
 
-                const img = document.createElement('img');
-                img.src = event.target.result;
-                img.alt = `Uploaded Image ${index + 1}`;
-                img.className = 'img-thumbnail rounded';
-                img.style ='height:157px;width:157px;';
-                col.appendChild(img);
-                fileDisplayArea.appendChild(col);
-                };
+                    if (file.type.startsWith('image/')) {
+                        // Standard image
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                            const col = document.createElement('div');
+                            col.className = 'col-md-3 mb-3';
+                            const img = document.createElement('img');
+                            img.src = event.target.result;
+                            img.className = 'img-thumbnail rounded';
+                            img.style = 'height:157px;width:157px;';
+                            col.appendChild(img);
+                            fileDisplayArea.appendChild(col);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                   else if (fileName.endsWith('.dcm')) {
+                        // Replace DICOM rendering with a static icon
+                        const col = document.createElement('div');
+                        col.className = 'col-md-3 mb-3';
 
-                reader.readAsDataURL(file);
-            });
+                        const icon = document.createElement('img');
+                        icon.src = 'https://img.icons8.com/?size=100&id=5kwq5uxYYQvn&format=png&color=000000';
+                        icon.alt = 'DICOM File';
+                        icon.style.width = '100px';
+                        icon.style.height = '100px';
+                        icon.style.display = 'block';
+                        icon.style.margin = '0 auto 10px';
+
+                        const caption = document.createElement('p');
+                        caption.innerText = file.name;
+                        caption.className = 'text-center small';
+
+                        col.appendChild(icon);
+                        col.appendChild(caption);
+                        fileDisplayArea.appendChild(col);
+                    }
+
+                    else {
+                        alert(`Unsupported file format: ${file.name}`);
+                    }
+                }
             });
         });
     </script>
-    }
+
+}
