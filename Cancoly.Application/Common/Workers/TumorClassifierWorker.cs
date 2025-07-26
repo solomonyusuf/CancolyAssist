@@ -28,18 +28,17 @@ namespace Cancoly.Application.Common.Workers
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-
-            using (var scope = _provider.CreateScope())
-            {
-                var _unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
-                var _openai = scope.ServiceProvider.GetRequiredService<OpenAIService>();
-                var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-
+        {  
+                
                 while (!stoppingToken.IsCancellationRequested)
                 {
                     try
                     {
+                        var scope = _provider.CreateScope();
+                        var _unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+                        var _openai = scope.ServiceProvider.GetRequiredService<OpenAIService>();
+                        var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
                         var scans = await _unitOfWork.BrainScanRepository.Query().Where(x=> x.isComplete == false).Take(5).ToListAsync();
                        
                         if (scans != null)
@@ -48,11 +47,14 @@ namespace Cancoly.Application.Common.Workers
                             {
                                 if (item != null)
                                 {
+                                    var _unitOfWork2 = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+
                                     var uploads = await _unitOfWork.ScanUploadRepository.Query()
                                                                    .Where(x => x.BrainScanId == item.Id)
                                                                    .ToListAsync();
                                     if(uploads != null)
                                     {
+                                        
                                         foreach (var upload in uploads)
                                         {
 
@@ -64,7 +66,7 @@ namespace Cancoly.Application.Common.Workers
                                             upload.Size = payload.tumor_size;
                                             upload.Label = payload.tumor_type;
                                             upload.Stage = payload.tumor_stage;
-                                            upload.Confidence = payload.confidence;
+                                            upload.Confidence = double.Parse(payload.confidence);
 
                                         }
 
@@ -72,14 +74,14 @@ namespace Cancoly.Application.Common.Workers
 
                                     item.Report = "";
 
-                                    _unitOfWork.ScanUploadRepository.BulkUpdate(uploads);
-                                    _unitOfWork.Save();
+                                    _unitOfWork2.ScanUploadRepository.BulkUpdate(uploads);
+                                    _unitOfWork2.Save();
 
                                     item.isComplete = true;
                                 }
 
 
-
+                                await Task.Delay(10000, stoppingToken);
                             }
 
                             _unitOfWork.BrainScanRepository.BulkUpdate(scans);
@@ -93,11 +95,6 @@ namespace Cancoly.Application.Common.Workers
 
                     await Task.Delay(10000, stoppingToken);
                 }
-
-
-
-            }
-
         }
 
         public async Task SendEmailAsync(string ToEmail, string Subject, string HTMLBody, ApplicationUser user = null)
