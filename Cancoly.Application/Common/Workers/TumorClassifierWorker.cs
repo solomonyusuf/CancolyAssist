@@ -28,19 +28,19 @@ namespace Cancoly.Application.Common.Workers
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {  
-                
+        {
+            using (var scope = _provider.CreateScope())
+            {
                 while (!stoppingToken.IsCancellationRequested)
                 {
                     try
                     {
-                        var scope = _provider.CreateScope();
                         var _unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
                         var _openai = scope.ServiceProvider.GetRequiredService<OpenAIService>();
                         var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-                        var scans = await _unitOfWork.BrainScanRepository.Query().Where(x=> x.isComplete == false).Take(5).ToListAsync();
-                       
+                        var scans = await _unitOfWork.BrainScanRepository.Query().Where(x => x.isComplete == false).Take(5).ToListAsync();
+
                         if (scans != null)
                         {
                             foreach (var item in scans)
@@ -52,9 +52,9 @@ namespace Cancoly.Application.Common.Workers
                                     var uploads = await _unitOfWork.ScanUploadRepository.Query()
                                                                    .Where(x => x.BrainScanId == item.Id)
                                                                    .ToListAsync();
-                                    if(uploads != null)
+                                    if (uploads != null)
                                     {
-                                        
+
                                         foreach (var upload in uploads)
                                         {
 
@@ -95,6 +95,7 @@ namespace Cancoly.Application.Common.Workers
 
                     await Task.Delay(10000, stoppingToken);
                 }
+            }
         }
 
         public async Task SendEmailAsync(string ToEmail, string Subject, string HTMLBody, ApplicationUser user = null)

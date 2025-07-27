@@ -13,6 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
+	  <PackageReference Include="Azure.AI.Inference" Version="1.0.0-beta.5" />
+	  <PackageReference Include="Azure.AI.OpenAI" Version="2.1.0" />
 	  <PackageReference Include="fo-dicom.NetCore" Version="4.0.8" />
 	  <PackageReference Include="OpenAI" Version="2.1.0" />
 	  <PackageReference Include="Paystack.Net" Version="1.1.1" />
