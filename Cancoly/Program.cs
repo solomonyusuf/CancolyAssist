@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Cancoly;
@@ -24,7 +23,7 @@ using Microsoft.AspNetCore.StaticFiles;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-bool production = true;
+bool production = false;
 bool seeder = true;
 
 var env = (production ? "ProductionConnection" : "DefaultConnection");
@@ -65,6 +64,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
  
 builder.Services.AddDistributedMemoryCache();
+
 builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
 builder.Services.AddLogging(x =>

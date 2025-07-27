@@ -79,7 +79,7 @@ namespace Cancoly.Application.Features
                         ChatMessageContentPart.CreateImagePart(
                             BinaryData.FromBytes(File.ReadAllBytes(Path.Combine(filePath))),
                             $"image/{fileType}",
-                            ChatImageDetailLevel.Low
+                            ChatImageDetailLevel.High
                         )
                     )
                  ];

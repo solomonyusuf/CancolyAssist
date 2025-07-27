@@ -75,7 +75,7 @@ namespace Cancoly.Application.Common.Workers
                                     item.Report = "";
 
                                     _unitOfWork2.ScanUploadRepository.BulkUpdate(uploads);
-                                    _unitOfWork2.Save();
+                                    await _unitOfWork2.Save();
 
                                     item.isComplete = true;
                                 }
@@ -85,7 +85,7 @@ namespace Cancoly.Application.Common.Workers
                             }
 
                             _unitOfWork.BrainScanRepository.BulkUpdate(scans);
-                            _unitOfWork.Save();
+                            await _unitOfWork.Save();
                         }
                     }
                     catch (Exception ex)
