@@ -127,6 +127,44 @@ Make sure you have the following installed on your system:
 
 ---
 
+Got it — you want a **README section** explaining your dataset, how it can be used by your users to test your app, and specifically how they can use the `training` folder to verify accuracy.
+
+Here’s a polished section you can drop into your README:
+
+---
+
+## 📊 Dataset & Testing Accuracy
+
+This repository includes a dataset designed for **training and testing** the AI models used in Cancoly Assist.
+The dataset is organized to make it easy for developers and testers to evaluate performance and accuracy.
+Find the source for the dataset used here [Dataset Link](https://www.kaggle.com/datasets/sartajbhuvaji/brain-tumor-classification-mri)
+
+### **Folder Structure**
+
+```
+Dataset/
+├── training/        # Data used for model training
+├── validation/      # Data for fine-tuning and parameter adjustment
+└── testing/         # Data for final accuracy evaluation
+```
+
+### **How Users Can Use This Dataset**
+
+1. **Navigate to the `training` folder**
+   This folder contains labeled examples the AI uses to learn and improve predictions.
+
+2. **upload a slice of the image data into the app **
+
+   * Create an account and login.
+   * On the sidebar select scans, then you will see the add scan button.
+   * Eter your scan title and upload some MRI images
+
+
+---
+
+✅ **Tip:** The more representative the `training` folder is of your real-world use cases.
+
+
 ## 📂 Project Structure
 
 ```
