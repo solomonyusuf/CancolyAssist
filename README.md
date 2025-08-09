@@ -1,7 +1,9 @@
 ````markdown
 # CancolyAssist
 
-Cancoly is an AI-powered medical imaging platform designed to help healthcare professionals analyze MRI scans for early tumor detection and diagnosis.
+Cancoly is an AI-powered medical imaging platform designed to help healthcare professionals analyze MRI scans
+ for early tumor detection and diagnosis.
+
 Using advanced machine learning models, Cancoly enables users to:
 
     Upload MRI scans securely via a web interface.
@@ -12,7 +14,9 @@ Using advanced machine learning models, Cancoly enables users to:
 
     Access results through an easy-to-use dashboard.
 
-With #CancolyAssist, our mission is to empower radiologists and clinicians by reducing analysis time, increasing diagnostic accuracy, and improving patient outcomes — especially in settings where specialized radiology expertise is scarce.
+With #CancolyAssist, our mission is to empower radiologists and clinicians by reducing analysis time,
+increasing diagnostic accuracy, and improving patient outcomes — especially in settings where
+specialized radiology expertise is scarce.
 
 ---
 
