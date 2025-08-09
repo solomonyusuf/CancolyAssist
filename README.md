@@ -1,7 +1,9 @@
 
 # CancolyAssist
 
-![Home page](https://raw.githubusercontent.com/solomonyusuf/CancolyAssist/master/Demo/Screenshot%202025-07-15%20at%2020-52-15%20Home%20page%20-%20Cancoly.png)
+![Home page](https://qrcodeng.com/storage/01986702/media/271ccfc5-0713-4e0e-9986-89fca25c95e7.png)
+
+![Login](https://qrcodeng.com/storage/01986702/media/433527ed-c527-45a2-8dbc-8f4e44296447.png)
 
 Cancoly is an AI-powered medical imaging platform designed to help healthcare professionals analyze MRI scans
  for early tumor detection and diagnosis.
