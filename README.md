@@ -166,11 +166,5 @@ docker compose down
 
 ---
 
-## 📜 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
 💡 **Pro Tip:** You can easily deploy this app to any cloud platform that supports Docker — no additional setup required.
 
