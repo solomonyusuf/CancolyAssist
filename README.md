@@ -73,7 +73,7 @@ Make sure you have the following installed on your system:
 
 ## ⚙️ Configuration
 
-* Environment variables can be set in a `..cancoly/appsetting.json` file.
+* Environment variables can be set in a `./Cancoly/appsetting.json` file.
 * The app automatically connects to the **remote database** configured in your environment variables.
 * this configuration is not required to be added again since it is already set up
 
