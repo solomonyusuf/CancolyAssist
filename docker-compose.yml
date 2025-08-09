@@ -1,0 +1,11 @@
+version: '3.9'
+
+services:
+  cancoly:
+    build:
+      context: .
+      dockerfile: Cancoly/Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    restart: unless-stopped
