@@ -81,12 +81,27 @@ Make sure you have the following installed on your system:
 ```
 .
 ├── Cancoly                 # .NET 8 application source code
-├── Cancoly.Application
-├── Cancoly.Persistence
-├── Cancoly.Domain
-├── docker-compose.yml # Docker services configuration
-└── README.md          # Documentation
+├── Cancoly.Application     # Application layer (use cases, DTOs, business logic)
+├── Cancoly.Persistence     # Data access layer (EF Core, repositories, Unit of Work)
+├── Cancoly.Domain          # Domain entities, value objects, core business rules
+├── Demo                    # Contain demo video and images
+├── docker-compose.yml      # Docker services configuration
+└── README.md               # Documentation
 ```
+
+This project follows **Clean Architecture** principles to maintain a clear separation of concerns:
+
+* **Domain Layer (`Cancoly.Domain`)**
+  Contains the core business entities and logic — completely independent of external frameworks.
+
+* **Application Layer (`Cancoly.Application`)**
+  Houses use case implementations and orchestrates business operations. This is where the **Unit of Work pattern** is utilized to manage multiple repository operations within a single transaction, ensuring consistency across database writes.
+
+* **Persistence Layer (`Cancoly.Persistence`)**
+  Implements repositories and data access logic using **Entity Framework Core**. Configured with **SQL Server** as the database backend and **Multiple Active Result Sets (MARS)** enabled, allowing multiple queries to run on the same connection without blocking each other — especially useful when fetching related datasets in parallel.
+
+This structure improves testability, scalability, and maintainability while ensuring that each layer has a single responsibility.
+
 
 ---
 
