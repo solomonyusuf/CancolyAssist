@@ -155,7 +155,7 @@ Dataset/
 1. **Navigate to the `training` folder**
    This folder contains labeled examples the AI uses to learn and improve predictions.
 
-2. **upload a slice of the image data into the app **
+2. **Upload a slice of the image data into the app**
 
    * Create an account and login.
    * On the sidebar select scans, then you will see the add scan button.
