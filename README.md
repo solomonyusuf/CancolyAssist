@@ -1,14 +1,27 @@
 ````markdown
-# 🚀 My .NET 8 Application
+# CancolyAssist
 
-This is a modern web application built with **.NET 8 (C#)** and containerized with **Docker Compose** for easy deployment.  
-The app is connected to a **remote database** and is ready for production or development environments.
+Cancoly is an AI-powered medical imaging platform designed to help healthcare professionals analyze MRI scans for early tumor detection and diagnosis.
+Using advanced machine learning models, Cancoly enables users to:
+
+    Upload MRI scans securely via a web interface.
+
+    Automatically process and analyze images for potential tumor indicators.
+
+    Receive detailed diagnostic insights to support medical decision-making.
+
+    Access results through an easy-to-use dashboard.
+
+With #CancolyAssist, our mission is to empower radiologists and clinicians by reducing analysis time, increasing diagnostic accuracy, and improving patient outcomes — especially in settings where specialized radiology expertise is scarce.
 
 ---
 
 ## 🌐 Live Demo
 You can access the live version of the app here:  
 🔗 **[cancoly.runasp.net](https://cancoly.runasp.net)**
+
+You can access the video demo of the app here:  
+🔗 [video demo](https://drive.google.com/file/d/1z8tWlME7jFqTIwKGUnqq41tE1tAzzmwU/view?usp=sharing)
 
 ---
 
