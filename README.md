@@ -1,5 +1,3 @@
-Here’s a **`README.md`** you can use to launch your app:
-
 ````markdown
 # 🚀 My .NET 8 Application
 
@@ -91,4 +89,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 💡 **Pro Tip:** You can easily deploy this app to any cloud platform that supports Docker — no additional setup required.
 
-
+```
