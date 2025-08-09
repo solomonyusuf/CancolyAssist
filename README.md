@@ -31,7 +31,7 @@ Make sure you have the following installed on your system:
 
 1. **Clone this repository**
    ```bash
-   git clone https://github.com/yourusername/your-repo.git
+   git clone  https://github.com/solomonyusuf/CancolyAssist.git
    cd your-repo
 ````
 
