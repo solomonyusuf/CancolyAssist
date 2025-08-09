@@ -1,4 +1,4 @@
-````markdown
+
 # CancolyAssist
 
 ![Home page](https://raw.githubusercontent.com/solomonyusuf/CancolyAssist/master/Demo/Screenshot%202025-07-15%20at%2020-52-15%20Home%20page%20-%20Cancoly.png)
@@ -16,7 +16,7 @@ Using advanced machine learning models, Cancoly enables users to:
 
     Access results through an easy-to-use dashboard.
 
-With #CancolyAssist, our mission is to empower radiologists and clinicians by reducing analysis time,
+With CancolyAssist, our mission is to empower radiologists and clinicians by reducing analysis time,
 increasing diagnostic accuracy, and improving patient outcomes — especially in settings where
 specialized radiology expertise is scarce.
 
@@ -52,7 +52,7 @@ Make sure you have the following installed on your system:
    ```bash
    git clone  https://github.com/solomonyusuf/CancolyAssist.git
    cd your-repo
-````
+   ````
 
 2. **Launch the application**
 
@@ -108,4 +108,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 💡 **Pro Tip:** You can easily deploy this app to any cloud platform that supports Docker — no additional setup required.
 
-```
