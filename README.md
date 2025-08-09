@@ -71,8 +71,59 @@ Make sure you have the following installed on your system:
 
 ## ⚙️ Configuration
 
-* Environment variables can be set in a `.env` file or directly inside the `docker-compose.yml`.
+* Environment variables can be set in a `..cancoly/appsetting.json` file.
 * The app automatically connects to the **remote database** configured in your environment variables.
+* this configuration is not required to be added again since it is already set up
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=.\\SQLEXPRESS;Initial Catalog=cancoly;Integrated Security=True;Multiple Active Result Sets=True;Trust Server Certificate=True", 
+    "ProductionConnection": "workstation id=**;packet size=4096;user id=**;pwd=**;data source=**;persist security info=False;initial catalog=**;TrustServerCertificate=True;Multiple Active Result Sets=True;", 
+
+    "MailUserName": "**",
+    "MailPassword": "**",
+    "Mailer": "**",
+    "MailPort": "587",
+    "MailHost": "smtp.gmail.com",
+    "ServerHost": "",
+
+    "SecretKey": "**",
+    "Model": "openai/gpt-4.1",
+    "OpenAIUrl": "https://models.github.ai/inference",
+
+    "PayStackSecret": "**",
+    "PayStackPublic": "**"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*"
+}
+```
+
+### explanations for each key:
+
+* **DefaultConnection** → Local SQL Server connection string with MARS enabled.
+* **ProductionConnection** → Remote SQL Server connection string for production with MARS enabled.
+* **MailUserName** → Email address for sending mail.
+* **MailPassword** → App password for email sending.
+* **Mailer** → The "from" email used in outgoing emails.
+* **MailPort** → Port for SMTP (587 for TLS).
+* **MailHost** → SMTP host server address.
+* **ServerHost** → Application host address (currently empty).
+* **SecretKey** → API key for model access.
+* **Model** → AI model name used for requests.
+* **OpenAIUrl** → Endpoint for AI model requests.
+* **PayStackSecret** → Private API key for Paystack payments.
+* **PayStackPublic** → Public API key for Paystack payments.
+* **Logging.LogLevel.Default** → Default log verbosity.
+* **Logging.LogLevel.Microsoft.AspNetCore** → Logging level for ASP.NET Core.
+* **AllowedHosts** → Defines which hosts are allowed to access the app.
+
 
 ---
 
