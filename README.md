@@ -129,11 +129,6 @@ Make sure you have the following installed on your system:
 
 ---
 
-Got it — you want a **README section** explaining your dataset, how it can be used by your users to test your app, and specifically how they can use the `training` folder to verify accuracy.
-
-Here’s a polished section you can drop into your README:
-
----
 
 ## 📊 Dataset & Testing Accuracy
 
