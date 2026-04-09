@@ -23,7 +23,7 @@ using Microsoft.AspNetCore.StaticFiles;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-bool production = true;
+bool production = false;
 bool seeder = true;
 
 var env = (production ? "ProductionConnection" : "DefaultConnection");

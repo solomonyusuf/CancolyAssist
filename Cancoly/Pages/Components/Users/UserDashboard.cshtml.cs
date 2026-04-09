@@ -79,8 +79,8 @@ namespace Cancoly.Pages.Components.Users
                                                 .Select(x => x.Amount)
                                                 .SumAsync();
 
-                    balance_percent = ((weekly / balance) * 100);
-                    quota_percent = ((quota / percent) * 100);
+                    balance_percent = balance == 0 ? 0 : ((weekly / balance) * 100);
+                    quota_percent = percent == 0 ? 0 : ((quota / percent) * 100);
                 });
                 
             }

@@ -2,160 +2,230 @@
 @model Cancoly.Pages.Components.Users.UserDashboardModel
 @{
     Layout = "_MainLayout";
+    ViewData["Title"] = "Clinical Dashboard";
 }
-<div class="container-xxl flex-grow-1 container-p-y">
-    <div class="row justify-content-center">
-        
-        <div class="col-lg-8 col-md-8">
-            <div class="row justify-content-center">
-                <div class="col-lg-4 col-md-12  mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="card-title d-flex align-items-start justify-content-between">
-                                <div class="">
-                                    <i style="font-size:40px;" class="bx bx-layout"></i>
+
+<div class="container-fluid py-4 px-md-5  min-vh-100">
+    <!-- Header Section -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3">
+        <div>
+            <h1 class="h3 fw-bold text-dark mb-1">Welcome back!</h1>
+            <p class="text-muted mb-0">Monitor your brain scans and clinical reports in real-time.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="/user-brain-scans" class="btn btn-outline-primary border-2 fw-semibold px-4">
+                <i class="bx bx-history me-1"></i> History
+            </a>
+            <a href="/user-brain-scans" class="btn btn-primary fw-semibold px-4 shadow-sm">
+                <i class="bx bx-plus-circle me-1"></i> New Scan
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Stats Grid (Left Column) -->
+        <div class="col-xl-8">
+            <div class="row g-4 mb-4">
+                <!-- Scans Card -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card border-0 shadow-sm h-100 transition-hover">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="bg-primary bg-opacity-10 p-3 rounded-3">
+                                    <i class="bx bx-brain text-white fs-2"></i>
                                 </div>
                                 <div class="dropdown">
-                                    <button class="btn p-0"
-                                            type="button"
-                                            id="cardOpt3"
-                                            data-bs-toggle="dropdown"
-                                            aria-haspopup="true"
-                                            aria-expanded="false">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    <button class="btn btn-link text-muted p-0" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded fs-4"></i>
                                     </button>
-                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt3">
-                                        <a class="dropdown-item" href="/user-brain-scans">View More</a>
-                                    </div>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
+                                        <li><a class="dropdown-item" href="/user-brain-scans">Detailed View</a></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <span class="fw-semibold d-block mb-1">Scans</span>
-                            <h3 class="card-title mb-2">@Model.scan.ToString("N0")</h3>
-                            <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +@Model.scan_percent</small>
+                            <h6 class="text-uppercase text-muted fw-bold small mb-1 ls-wide">Total Scans</h6>
+                            <h2 class="fw-bold mb-2">@Model.scan.ToString("N0")</h2>
+                            <div class="d-flex align-items-center">
+                                <span class="badge bg-success-subtle text-success border-0 px-2 py-1 me-2">
+                                    <i class="bx bx-trending-up me-1"></i>+@Model.scan_percent%
+                                </span>
+                                <small class="text-muted">vs last week</small>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-12  mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="card-title d-flex align-items-start justify-content-between">
-                                <div class="">
-                                    <i style="font-size:40px;" class="bx bx-collection"></i>
+
+                <!-- Reports Card -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card border-0 shadow-sm h-100 transition-hover">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="bg-info bg-opacity-10 p-3 rounded-3">
+                                    <i class="bx bx-file text-white  fs-2"></i>
                                 </div>
                                 <div class="dropdown">
-                                    <button class="btn p-0"
-                                            type="button"
-                                            id="cardOpt6"
-                                            data-bs-toggle="dropdown"
-                                            aria-haspopup="true"
-                                            aria-expanded="false">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    <button class="btn btn-link text-muted p-0" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded fs-4"></i>
                                     </button>
-                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt6">
-                                        <a class="dropdown-item" href="/all-reports">View More</a>
-                                    </div>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
+                                        <li><a class="dropdown-item" href="/all-reports">View All</a></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <span class="fw-semibold d-block mb-1">Reports</span>
-                            <h3 class="card-title text-nowrap mb-1">@Model.scan.ToString("N0")</h3>
-                            <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +@Model.scan_percent</small>
+                            <h6 class="text-uppercase text-muted fw-bold small mb-1 ls-wide">Reports</h6>
+                            <h2 class="fw-bold mb-2">@Model.scan.ToString("N0")</h2>
+                            <div class="d-flex align-items-center">
+                                <span class="badge bg-success-subtle text-success border-0 px-2 py-1 me-2">
+                                    <i class="bx bx-trending-up me-1"></i>+@Model.scan_percent%
+                                </span>
+                                <small class="text-muted">Generated</small>
+                            </div>
                         </div>
                     </div>
                 </div>
-             </div>
-            <div class="row justify-content-center">
-                <div class="col-lg-4 col-md-12  mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="card-title d-flex align-items-start justify-content-between">
-                                <div class="">
-                                    <i style="font-size:40px;" class="bx bx-error"></i>
+
+                <!-- Quota Card -->
+                <div class="col-md-12 col-lg-4">
+                    <div class="card border-0 shadow-sm h-100 transition-hover">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="bg-warning bg-opacity-10 p-3 rounded-3">
+                                    <i class="bx bx-bolt-circle text-white fs-2"></i>
                                 </div>
                                 <div class="dropdown">
-                                    <button class="btn p-0"
-                                            type="button"
-                                            id="cardOpt4"
-                                            data-bs-toggle="dropdown"
-                                            aria-haspopup="true"
-                                            aria-expanded="false">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    <button class="btn btn-link text-muted p-0" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded fs-4"></i>
                                     </button>
-                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt4">
-                                        <a class="dropdown-item" href="/user-plans">View Plans</a>
-                                    
-                                    </div>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
+                                        <li><a class="dropdown-item" href="/user-plans">Upgrade Plan</a></li>
+                                    </ul>
                                 </div>
                             </div>
-                            <span class="fw-semibold d-block mb-1">Quota</span>
-                            <h3 class="card-title text-nowrap mb-2">@(!User.IsInRole("Business") ? 100 - Model.quota : "Unlimited")</h3>
+                            <h6 class="text-uppercase text-muted fw-bold small mb-1 ls-wide">Monthly Quota</h6>
                             @if (!User.IsInRole("Business"))
                             {
-                                <small class="text-danger fw-semibold"><i class="bx bx-down-arrow-alt"></i> -@Math.Round(Model.quota_percent)%</small>
-
+                                <h2 class="fw-bold mb-2">@(100 - Model.quota)%</h2>
+                                <div class="progress mb-2" style="height: 6px;">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: @(100 - Model.quota)%" aria-valuenow="@(100 - Model.quota)" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <small class="text-danger fw-semibold"><i class="bx bx-down-arrow-alt"></i> -@Math.Round(Model.quota_percent)% used</small>
+                            }
+                            else
+                            {
+                                <h2 class="fw-bold mb-2">Unlimited</h2>
+                                <span class="badge bg-primary-subtle text-primary border-0 px-2 py-1">Business Plan</span>
                             }
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-12  mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="card-title d-flex align-items-start justify-content-between">
-                                <div class="">
-                                    <i style="font-size:40px;" class="bx bx-credit-card-alt"></i>
-                                </div>
-                                <div class="dropdown">
-                                    <button class="btn p-0"
-                                            type="button"
-                                            id="cardOpt1"
-                                            data-bs-toggle="dropdown"
-                                            aria-haspopup="true"
-                                            aria-expanded="false">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="cardOpt1">
-                                        <a class="dropdown-item" href="/user-payments">View More</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <span class="fw-semibold d-block mb-1">Transactions</span>
-                            <h3 class="card-title mb-2">₦@Model.balance.ToString("N0")</h3>
-                            <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +@Math.Round(Model.balance_percent)%</small>
+            </div>
+
+            <!-- Transactions Card -->
+            <div class="card border-0 shadow-sm overflow-hidden">
+                <div class="card-header bg-white border-0 p-4 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold mb-0">Financial Overview</h5>
+                    <div class="text-end">
+                        <h4 class="fw-bold text-primary mb-0">₦@Model.balance.ToString("N0")</h4>
+                        <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +@Math.Round(Model.balance_percent)% this week</small>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="border-0 px-4 py-3 small text-uppercase text-muted fw-bold">Service</th>
+                                <th class="border-0 px-4 py-3 small text-uppercase text-muted fw-bold">Channel</th>
+                                <th class="border-0 px-4 py-3 small text-uppercase text-muted fw-bold text-end">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var data in Model.Transactions)
+                            {
+                                <tr>
+                                    <td class="px-4 py-3">
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-sm bg-light rounded-circle p-2 me-3">
+                                                <img src="https://img.icons8.com/?size=100&id=lWWE908jTJ3m&format=png&color=000000" width="24" alt="Icon" />
+                                            </div>
+                                            <span class="fw-semibold">@data.Service</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <span class="badge bg-secondary-subtle text-secondary border-0">@data.Channel.ToUpper()</span>
+                                    </td>
+                                    <td class="px-4 py-3 text-end">
+                                        <span class="fw-bold text-danger">- ₦@data.Amount.ToString("N0")</span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer bg-white border-0 p-4 text-center">
+                    <a href="/user-payments" class="btn btn-link text-primary fw-bold text-decoration-none">View All Transactions <i class="bx bx-right-arrow-alt ms-1"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: System Status & Quick Actions -->
+        <div class="col-xl-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0 p-4">
+                    <h5 class="fw-bold mb-0">System Status</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-4 p-3 bg-opacity-10 rounded-3">
+                        <i class="bx bxs-check-circle text-success fs-3 me-3"></i>
+                        <div>
+                            <h6 class="fw-bold mb-0">All Systems Operational</h6>
+                            <small class="text-muted">Last checked: Just now</small>
                         </div>
+                    </div>
+                    
+                    <h6 class="text-uppercase text-muted fw-bold small mb-3 ls-wide">Quick Actions</h6>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-light text-start p-3 border-0 rounded-3 transition-hover">
+                            <i class="bx bx-user-voice me-2 text-primary"></i> Contact Support
+                        </button>
+                        <button class="btn btn-light text-start p-3 border-0 rounded-3 transition-hover">
+                            <i class="bx bx-cog me-2 text-primary"></i> Account Settings
+                        </button>
+                        <button class="btn btn-light text-start p-3 border-0 rounded-3 transition-hover">
+                            <i class="bx bx-help-circle me-2 text-primary"></i> Documentation
+                        </button>
+                    </div>
+
+                    <div class="mt-5 p-4 bg-primary rounded-4 text-white position-relative overflow-hidden">
+                        <div class="position-relative z-index-1">
+                            <h5 class="fw-bold text-white">Upgrade Account</h5>
+                            <p class="small opacity-75">Unlock unlimited scans and advanced AI diagnostics.</p>
+                            <a href="/user-plans" class="btn btn-white btn-sm fw-bold px-3">Upgrade Now</a>
+                        </div>
+                        <i class="bx bxs-zap position-absolute end-0 bottom-0 text-white opacity-25" style="font-size: 120px; transform: translate(20%, 20%)"></i>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col">
-            <div class="card h-100">
-                <div class="card-header d-flex align-items-center justify-content-between">
-                    <h5 class="card-title m-0 me-2">Recent Transactions</h5>
-                </div>
-                <div class="card-body">
-                    <ul class="p-0 m-0">
-                        @foreach (var data in Model.Transactions)
-                        {
-                            <li class="d-flex mb-1 border-info">
-                                <div class="avatar flex-shrink-0 me-3">
-                                    <img src="https://img.icons8.com/?size=100&id=lWWE908jTJ3m&format=png&color=000000" alt="User" class="rounded" />
-                                </div>
-                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                    <div class="me-2">
-                                        <small class="text-muted d-block mb-1">@data.Channel.ToUpper()</small>
-                                        <h6 class="mb-0">@data.Service</h6>
-                                    </div>
-                                    <div class="user-progress d-flex align-items-center gap-1">
-                                        <h6 class="mb-0 text-danger">- ₦@data.Amount.ToString("N0")</h6>
-                                        <span class="text-muted">NGN</span>
-                                    </div>
-                                </div>
-                            </li>
-                        }
-                        
-                    </ul>
-                </div>
-            </div>
-        </div>
-  
     </div>
 </div>
 
+<style>
+    .ls-wide { letter-spacing: 0.05em; }
+    .transition-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .transition-hover:hover { transform: translateY(-4px); box-shadow: 0 1rem 3rem rgba(0,0,0,.1) !important; }
+    .bg-primary-subtle { background-color: #e7e7ff; }
+    .text-primary { color: #696cff !important; }
+    .btn-primary { background-color: #696cff; border-color: #696cff; }
+    .btn-outline-primary { color: #696cff; border-color: #696cff; }
+    .btn-outline-primary:hover { background-color: #696cff; color: #fff; }
+    .bg-success-subtle { background-color: #e8fadf; }
+    .text-success { color: #71dd37 !important; }
+    .bg-info-subtle { background-color: #e2f6ff; }
+    .text-info { color: #03c3ec !important; }
+    .bg-warning-subtle { background-color: #fff2d6; }
+    .text-warning { color: #ffab00 !important; }
+    .bg-secondary-subtle { background-color: #ebeef0; }
+    .avatar-sm { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
+    .btn-white { background-color: #fff; color: #696cff; border: none; }
+    .btn-white:hover { background-color: #f8f9fa; }
+</style>
